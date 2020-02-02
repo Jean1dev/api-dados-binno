@@ -1,18 +1,34 @@
-const port = process.env.PORT || 8082
-
-const bodyParser = require('body-parser')
+require('./database/index')
 const express = require('express')
-const server = express()
-// const allowCors = require('./config/cors')
-const queryParser = require('express-query-int')
+const graphqlHTTP = require('express-graphql')
+const schema = require('./graphql/schema')
+const routes = require('./routes')
 
-server.use(bodyParser.urlencoded({ extended: true }))
-server.use(bodyParser.json())
-// server.use(allowCors)
-server.use(queryParser())
+class App {
+    constructor() {
+        this.server = express()
+        this.monitoring()
+        this.middlewares()
+        this.routes()
+        this.exceptionHandler()
+    }
 
-server.listen(port, function() {
-    console.log(`api-dados online on port : ${port}.`)
-})
+    monitoring() { }
 
-module.exports = server
+    middlewares() {
+        this.server.use(express.json())
+    }
+
+    routes() { 
+        this.server.use('/graphql', graphqlHTTP((req) => ({
+            schema: schema,
+            graphiql: true
+        })))
+
+        this.server.use(routes)
+    }
+
+    exceptionHandler() { }
+}
+
+module.exports = new App().server

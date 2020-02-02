@@ -1,5 +1,6 @@
-const restful = require('node-restful')
 const PointSchema = require('./utils/PointSchema')
+// const mongoose = require('mongoose')
+const restful = require('node-restful')
 const mongoose = restful.mongoose
 
 const Rota = new mongoose.Schema({
@@ -12,4 +13,7 @@ const Rota = new mongoose.Schema({
     collection: 'rotas'
 })
 
-module.exports = restful.model('Rotas', Rota)
+module.exports = {
+    schema: Rota,
+    rest: mongoose.model('Rota', Rota)
+}

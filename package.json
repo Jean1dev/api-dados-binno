@@ -22,7 +22,12 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
     "express-query-int": "^3.0.0",
+    "graphql": "^14.6.0",
+    "graphql-subscriptions": "^1.1.0",
+    "graphql-tools": "^4.0.6",
+    "lodash": "^4.17.15",
     "mongoose": "^5.4.9",
     "node-restful": "^0.2.6"
   }
