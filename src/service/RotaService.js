@@ -1,4 +1,4 @@
-const Rota = require('../model/Rota')
+const Rota = require('../schema/Rota')
 
 async function gerarCoordenadas(coords) {
 
