@@ -1,4 +1,4 @@
-const schema = require('../model/Rota').rest
+const schema = require('../schema/Rota').rest
 
 schema.methods(['get', 'post', 'put', 'delete'])
 
