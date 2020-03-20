@@ -8,7 +8,8 @@ class Matriz extends Sequelize.Model {
             site: Sequelize.STRING,
             contato: Sequelize.STRING,
         }, {
-            sequelize
+            sequelize,
+            tableName: 'matriz'
         })
 
         return this
