@@ -3,7 +3,7 @@ const path = require('path')
 const postgresConfig = require('../config/database')
 const Sequelize = require('sequelize')
 const mongoose = require('mongoose')
-const mongoUrl = process.env.MONGO_URL || 'mongodb+srv://default:default@cluster0-e7nlh.mongodb.net/test?retryWrites=true&w=majority'
+const mongoUrl = process.env.MONGO_URL
 
 class Database {
     constructor() {
@@ -41,4 +41,7 @@ class Database {
     }
 }
 
-module.exports = new Database()
+module.exports = {
+    singleton: new Database(),
+    sequelizeModels: new Database().connection
+}

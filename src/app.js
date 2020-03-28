@@ -1,4 +1,4 @@
-require('./database/index')
+const { sequelizeModels } = require('./database/index')
 const express = require('express')
 const http = require('http')
 const ApolloServer = require('apollo-server-express').ApolloServer
@@ -9,7 +9,6 @@ class App {
     constructor() {
         this.createServer()
         this.monitoring()
-        this.middlewares()
         this.routes()
         this.exceptionHandler()
         this.logs()
@@ -17,7 +16,11 @@ class App {
 
     createServer() {
         this.app = express()
-        this.server = new ApolloServer({ schema: schema })
+        this.middlewares()
+        this.server = new ApolloServer({ 
+            schema: schema,
+            context: this.configureGraphQlContext()
+        })
         this.server.applyMiddleware({ app: this.app })
         this.httpServer = http.createServer(this.app)
         this.server.installSubscriptionHandlers(this.httpServer)
@@ -25,8 +28,16 @@ class App {
 
     monitoring() { }
 
+    configureGraphQlContext() {
+        return {
+            db: sequelizeModels.models,
+            transaction: sequelizeModels.transaction
+        }
+    }
+
     middlewares() {
         this.app.use(express.json())
+
     }
 
     routes() {

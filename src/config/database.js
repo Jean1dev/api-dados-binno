@@ -4,11 +4,12 @@ const PROD = {
     username: process.env.USERNAME_DB || 'jeanfernandes',
     password: process.env.PASSWD_DB || 'admin',
     database: process.env.DB_NAME || 'binno_db',
+    ssl: process.env.SSL_CONNECTION ? true : false,
     define: {
         timestamps: true,
         underscored: true,
-        underscoredAll: true
-    }
+        underscoredAll: true,
+    },
 }
 
 module.exports = PROD
