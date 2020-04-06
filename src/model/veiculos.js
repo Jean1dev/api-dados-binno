@@ -20,7 +20,6 @@ class Veiculo extends Sequelize.Model {
             tempo_max_horas: Sequelize.STRING,
             distancia_max: Sequelize.DOUBLE,
             tipo_viagem: Sequelize.STRING,
-            pessoa_id: Sequelize.STRING
         }, {
             sequelize,
             tableName: 'veiculo'

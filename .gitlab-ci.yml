@@ -2,6 +2,7 @@ image: node:latest
 
 stages:
   - build
+  - db_migrate
   - deploy_prod
 
 cache:
@@ -15,6 +16,18 @@ install_dependencies:
   artifacts:
     paths:
       - node_modules/
+
+configure_databse:
+  stage: db_migrate
+  only:
+    - master
+  script:
+    - export HOST_DB=$HOST_DB
+    - export USERNAME_DB=$USERNAME_DB
+    - export PASSWD_DB=$PASSWD_DB
+    - export DB_NAME=$DB_NAME
+    - export SSL_CONNECTION=true
+    - npx sequelize-cli db:migrate
 
 test_environment:
   stage: deploy_prod

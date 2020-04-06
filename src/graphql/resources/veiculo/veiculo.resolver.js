@@ -1,7 +1,7 @@
 module.exports = {
     Veiculo: {
         pessoa: (veiculo, args, { db }, graphQlResolver) => {
-            return db.Pessoa.findAll({
+            return db.Pessoa.findOne({
                 where: {
                     id : veiculo.get('pessoa_id')
                 }
@@ -34,7 +34,7 @@ module.exports = {
         },
 
         deleteVeiculo: (parent, { id } , { db }) => {
-            return db.Veiculo.findByPk(parseInt(input.id))
+            return db.Veiculo.findByPk(parseInt(id))
                 .then((v) => {
                     return v.destroy().then(veiculo => !!veiculo)
                 })

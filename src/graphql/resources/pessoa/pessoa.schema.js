@@ -19,6 +19,7 @@ const type = `
         cpf: String
         tipo: String!
         veiculos: [ Veiculo ]
+        rotas: [ Rota ]
     }
 
     input PessoaCreateInput {
