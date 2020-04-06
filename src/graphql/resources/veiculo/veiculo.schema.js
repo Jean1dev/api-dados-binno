@@ -22,7 +22,7 @@ const type = `
         tempo_max_horas: String
         distancia_max: Float
         tipo_viagem: String
-        pessoa: Int!
+        pessoa_id: Int!
     }
 
     input VeiculoUpdateInput {
@@ -35,7 +35,7 @@ const type = `
         tempo_max_horas: String
         distancia_max: Float
         tipo_viagem: String
-        pessoa: Int!
+        pessoa_id: Int!
     }
 `
 

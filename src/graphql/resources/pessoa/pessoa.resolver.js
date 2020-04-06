@@ -6,6 +6,10 @@ module.exports = {
                     pessoa_id: pessoa.get('id')
                 }
             })
+        },
+
+        rotas: (pessoa, args, { db }) => {
+            return []
         }
     },
     Query: {

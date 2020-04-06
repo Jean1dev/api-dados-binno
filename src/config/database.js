@@ -5,6 +5,9 @@ const PROD = {
     password: process.env.PASSWD_DB || 'admin',
     database: process.env.DB_NAME || 'binno_db',
     ssl: process.env.SSL_CONNECTION ? true : false,
+    dialectOptions: {
+        ssl: process.env.SSL_CONNECTION ? true : false,
+    },
     define: {
         timestamps: true,
         underscored: true,

@@ -19,7 +19,9 @@ class App {
         this.middlewares()
         this.server = new ApolloServer({ 
             schema: schema,
-            context: this.configureGraphQlContext()
+            context: this.configureGraphQlContext(),
+            introspection: true, // PARA HABILITAR O PLAYGROUND EM PRODUCAO
+            playground: true, // PARA HABILITAR O PLAYGROUND EM PRODUCAO
         })
         this.server.applyMiddleware({ app: this.app })
         this.httpServer = http.createServer(this.app)
@@ -41,6 +43,7 @@ class App {
     }
 
     routes() {
+        this.app.use('/dados', routes)
         this.app.use(routes)
     }
 
