@@ -1,6 +1,7 @@
 image: node:latest
 
 stages:
+  - install
   - build
   - db_migrate
   - deploy_prod
@@ -8,14 +9,25 @@ stages:
 cache:
   paths:
     - node_modules/
+    - dist/
 
 install_dependencies:
-  stage: build
+  stage: install
   script:
     - npm install
   artifacts:
     paths:
       - node_modules/
+
+compile_typescript:
+  stage: build
+  only:
+    - master
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
 
 configure_databse:
   stage: db_migrate
