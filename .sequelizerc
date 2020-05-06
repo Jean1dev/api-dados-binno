@@ -8,7 +8,7 @@ const devEnv = {
 }
 
 const prodEnv = {
-    config: resolve(__dirname, 'dist', 'config', 'database.js'),
+    config: resolve(__dirname, 'dist', 'config', 'temp.js'),
     'models-path': resolve(__dirname, 'dist', 'models'),
     'migrations-path': resolve(__dirname, 'dist', 'database', 'migrations'),
     'seeders-path': resolve(__dirname, 'dist', 'database', 'seeds')    

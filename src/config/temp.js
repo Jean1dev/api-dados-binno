@@ -1,4 +1,4 @@
-export const PROD = {
+module.exports = {
     dialect: 'postgres',
     host: process.env.HOST_DB || 'localhost',
     username: process.env.USERNAME_DB || 'jeanfernandes',
