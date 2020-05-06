@@ -1,4 +1,4 @@
-const PROD = {
+export const PROD = {
     dialect: 'postgres',
     host: process.env.HOST_DB || 'localhost',
     username: process.env.USERNAME_DB || 'jeanfernandes',
@@ -14,5 +14,3 @@ const PROD = {
         underscoredAll: true,
     },
 }
-
-module.exports = PROD

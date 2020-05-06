@@ -7,7 +7,7 @@ module.exports = {
             })
         },
 
-        matriz: async (parent, { id }, { db }) => {
+        matriz: async (parent, { id }, { db, repository }) => {
             return await db.Matriz.findByPk(parseInt(id))
         }
     },

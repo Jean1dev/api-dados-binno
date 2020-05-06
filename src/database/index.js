@@ -12,7 +12,7 @@ class Database {
     }
 
     pg() {
-        this.connection = new Sequelize(postgresConfig)
+        this.connection = new Sequelize(postgresConfig.PROD)
         let pathModels = path.resolve(__dirname, '..', 'model')
 
         const models = fs.readdirSync(pathModels).filter(file => {

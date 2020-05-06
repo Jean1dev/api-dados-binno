@@ -9,6 +9,7 @@ class Matriz extends Sequelize.Model {
                 autoIncrement: true,
                 primaryKey: true
             },
+            nome: Sequelize.STRING,
             cnpj: Sequelize.STRING,
             telefone: Sequelize.STRING,
             site: Sequelize.STRING,
