@@ -2,6 +2,7 @@ const type = `
     # Matriz definition type
     type Matriz {
         id: ID!
+        nome: String!
         cnpj: String!
         telefone: String
         site: String
@@ -9,6 +10,7 @@ const type = `
     }
 
     input MatrizCreateInput {
+        nome: String!
         cnpj: String!
         telefone: String
         site: String
@@ -17,6 +19,7 @@ const type = `
 
     input MatrizUpdateInput {
         id: ID!
+        nome: String!
         cnpj: String
         telefone: String
         site: String
