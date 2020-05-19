@@ -39,7 +39,8 @@ configure_databse:
     - export PASSWD_DB=$PASSWD_DB
     - export DB_NAME=$DB_NAME
     - export SSL_CONNECTION=true
-    - npx sequelize-cli db:migrate
+    - export NODE_ENV=prod
+    - npm run migrate
 
 test_environment:
   stage: deploy_prod
