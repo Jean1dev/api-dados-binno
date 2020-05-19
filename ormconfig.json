@@ -6,7 +6,7 @@
     "password": "admin",
     "database": "binno_db",
     "entities": [
-        "./src/model/typemodels/*.ts"
+        "./src/modules/**/model/*.ts"
     ],
     "migrations": [
         "./src/database/migrations/*.ts"

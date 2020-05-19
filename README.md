@@ -1,8 +1,11 @@
-## Para qualquer operacao no banco de dados utilizar migrations
-https://sequelize.org/master/manual/migrations.html
+## Migrations
+ ** Para executar as migrations
+ * npx typeorm migration:run
+ ou
+ * npm run migrate
 
-- npx sequelize-cli migration:generate --name $NAME  // criar arquivo base para migrations
-- npx sequelize-cli db:migrate // roda as migrations pendentes
+ ** Para criar nova migrations
+ * npx typeorm migrations:create -n ${NOME_ARQUIVOS}
 
-## Rotas da aplicacao
-  
+ ** Rodar qualquer comando com cli TYPEORM
+ * ./node_modules/.bin/ts-node ./node_modules/.bin/typeorm  ${comando}
