@@ -4,21 +4,30 @@ import express, { Request, Response, NextFunction } from 'express'
 import 'express-async-errors'
 import { ApolloServer } from 'apollo-server-express'
 import http, { Server } from 'http'
-import schema from './graphql/schema'
 import Routes, { registerController } from './routes'
-import { sequelizeModels } from './database/index'
-import { getRepository } from 'typeorm'
 import { useExpressServer } from 'routing-controllers'
 import DefaultAppError from './errors/DefaultAppError'
+import BuildSchema from './graphql/builtSchema'
 
 class App {
 
-    public express: express.Application
-    public server: ApolloServer
+    private express: express.Application
+    private server: ApolloServer
     public httpServer: Server
 
     constructor() {
         this.express = express()
+    }
+
+    public start(port: number = 8082): void {
+        this.httpServer.listen(port, () => {
+            console.log('api-dados on ', port)
+            this.logs()
+        })
+    }
+
+    public async configure(): Promise<void> {
+        const schema = await BuildSchema()
         this.server = new ApolloServer({
             schema: schema,
             context: this.configureGraphQlContext(),
@@ -26,23 +35,18 @@ class App {
             playground: true, // PARA HABILITAR O PLAYGROUND EM PRODUCAO
         })
         this.httpServer = http.createServer(this.express)
-        this.configure()
+        this.middlewares()
         this.monitoringServer()
         this.routes()
         this.exceptionHandler()
-        this.logs()
-    }
-
-    private configure(): void {
-        this.middlewares()
         this.server.applyMiddleware({ app: this.express })
         this.server.installSubscriptionHandlers(this.httpServer)
     }
     private configureGraphQlContext(): object {
         return {
-            db: sequelizeModels.models,
-            transaction: sequelizeModels.transaction,
-            repository: getRepository
+            db: null,
+            transaction: null,
+            repository: null
         }
     }
 
@@ -80,10 +84,10 @@ class App {
         })
     }
 
-    private logs(): void {
+    public logs(): void {
         console.log(`🚀 Server ready at http://localhost:${this.server.graphqlPath}`)
         console.log(`🚀 Subscriptions ready at ws://localhost:${this.server.subscriptionsPath}`)
     }
 }
 
-export default new App().httpServer
+export default new App()

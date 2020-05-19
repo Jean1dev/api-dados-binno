@@ -1,7 +1,10 @@
 import { createConnection } from 'typeorm'
 import { PROD } from '../config/database'
 
-const entitiesPath = process.env.NODE_ENV === 'dev' ? './src/model/typemodels/*.ts' : './dist/model/typemodels/*.js'
+const entitiesPath = process.env.NODE_ENV === 'dev' ? "./src/modules/**/model/*.ts" : "./dist/modules/**/model/*.js"
+const migrationsPath = process.env.NODE_ENV === 'dev' ? './src/database/migrations/*.ts' : './dist/database/migrations/*.js'
+const migrationsDir = process.env.NODE_ENV === 'dev' ? './src/database/migrations' : './dist/database/migrations'
+
 const config: any = {
     type: 'postgres',
     host: PROD.host,
@@ -10,8 +13,8 @@ const config: any = {
     password: PROD.password,
     database: PROD.database,
     entities: [ entitiesPath ],
-    migrations: ['./src/database/migrations/*.ts'],
-    cli: { migrationsDir: './src/database/migrations' },
+    migrations: [],
+    cli: { migrationsDir: migrationsDir },
     default: {
         type: 'postgres',
         host: PROD.host,
@@ -20,9 +23,10 @@ const config: any = {
         password: PROD.password,
         database: PROD.database,
         entities: [ entitiesPath ],
-        migrations: ['./src/database/migrations/*.ts'],
-        cli: { migrationsDir: './src/database/migrations' }
-    }
+        migrations: [migrationsPath],
+        cli: { migrationsDir: migrationsPath }
+    },
+    logging: true
 }
 
 

@@ -1,7 +1,7 @@
 import * as express from 'express'
-import { IntegracaoMatrizController } from './integracao/matriz/IntegracaoMatrizController'
-import { IntegracaoUsuarioController } from './integracao/usuarioAcesso/IntegracaoUsuarioController'
-import { AutenticacaoController } from './controller/AutenticacaoController'
+import { IntegracaoMatrizController } from './modules/integracao/matriz/IntegracaoMatrizController'
+import { IntegracaoUsuarioController } from './modules/integracao/usuarioAcesso/IntegracaoUsuarioController'
+import { AutenticacaoController } from './modules/autenticacao/AutenticacaoController'
 
 const routes = express.Router()
 
