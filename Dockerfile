@@ -10,6 +10,7 @@ RUN npm install
 
 COPY . /usr/src/app
 
+RUN npm run build
 ENV PORT 8082
 ENV URL DOCKER
 EXPOSE $PORT
