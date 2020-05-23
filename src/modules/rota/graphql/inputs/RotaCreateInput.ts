@@ -1,4 +1,5 @@
 import { InputType, Field, Int } from "type-graphql";
+import SituacaoRota from "../../SituacaoRota.enum";
 
 @InputType()
 export default class RotaCreateInput {
@@ -9,7 +10,7 @@ export default class RotaCreateInput {
     @Field(() => Int)
     criado_por: number
 
-    @Field(() => Int)
+    @Field(() => Int, { nullable: true })
     enviado_para: number
 
     @Field(() => Boolean, { nullable: true })
@@ -20,4 +21,7 @@ export default class RotaCreateInput {
 
     @Field(() => Boolean, { nullable: true })
     finalizada?: boolean
+
+    @Field(type => SituacaoRota, { defaultValue: SituacaoRota.PLANEJADA })
+    situacao_rota: SituacaoRota
 }

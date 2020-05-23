@@ -1,6 +1,7 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { ObjectType, Field, ID, Int } from "type-graphql";
 import Pessoa from "../../pessoa/model/Pessoa";
+import SituacaoRota from "../SituacaoRota.enum";
 
 @Entity('rota')
 @ObjectType()
@@ -33,4 +34,8 @@ export default class Rota extends BaseEntity {
     @Column()
     @Field(() => Pessoa)
     enviado_para:number
+
+    @Column('int')
+    @Field(type => SituacaoRota)
+    situacao_rota: SituacaoRota
 }

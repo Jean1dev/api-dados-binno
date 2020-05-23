@@ -44,4 +44,7 @@ export default class Veiculo extends BaseEntity {
     @Column()
     @Field(() => Pessoa)
     pessoa_id: number
+
+    @Column()
+    veiculo_esta_sendo_utilizado_no_momento: boolean
 }
