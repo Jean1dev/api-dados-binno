@@ -66,6 +66,7 @@
   "exclude": [
     "__test__",
     "jest.config.js",
+    "ormconfig.js",
     "dist"
   ]
 }

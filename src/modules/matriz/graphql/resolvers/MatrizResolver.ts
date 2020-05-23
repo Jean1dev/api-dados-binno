@@ -1,16 +1,25 @@
 import { Resolver, Arg, Query } from "type-graphql";
 import Matriz from "../../model/Matriz";
+import MatrizRepository from "../../repository/MatrizRepository";
+import { container } from "tsyringe";
 
 @Resolver()
 export default class MatrizResolver {
+    private repository: MatrizRepository
 
-    @Query(() => Matriz)
-    public async matriz(@Arg("id") id: number ) {
-        return Matriz.findOne({ where: { id } })
+    constructor() {
+        this.repository = container.resolve(MatrizRepository)
     }
 
-    @Query(() => [ Matriz ])
-    public async matrizes(@Arg("limit") limit: number = 10, @Arg("offset") offset: number = 0) {
-            return Matriz.find({ take: limit, skip: offset })
+    @Query(() => Matriz)
+    public async matriz(@Arg("id") id: number) {
+        return this.repository.findOne({ id })
+    }
+
+    @Query(() => [Matriz])
+    public async matrizes(
+        @Arg("limit", { defaultValue: 10 }) limit: number,
+        @Arg("offset", { defaultValue: 0 }) offset: number) {
+        return this.repository.find(limit, offset)
     }
 }

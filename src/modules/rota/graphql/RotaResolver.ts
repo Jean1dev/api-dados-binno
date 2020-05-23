@@ -1,12 +1,29 @@
-import { Resolver, Query, Arg, Mutation, FieldResolver, Root, Subscription, PubSub, Publisher } from "type-graphql";
+import {
+    Resolver,
+    Query,
+    Arg,
+    Mutation,
+    FieldResolver,
+    Root,
+    Subscription,
+    PubSub,
+    Publisher,
+} from "type-graphql";
 import Rota from "../model/Rota";
-import DefaultAppError from "../../../errors/DefaultAppError";
 import RotaCreateInput from "./inputs/RotaCreateInput";
 import RotaUpdateInput from "./inputs/RotaUpdateInput";
 import Pessoa from "../../pessoa/model/Pessoa";
+import SituacaoRota from "../SituacaoRota.enum";
+import RotaRepository from "../repository/RotaRepository";
+import { container } from "tsyringe";
 
 @Resolver(Rota)
 export default class RotaResolver {
+    private repository: RotaRepository
+
+    constructor() {
+        this.repository = container.resolve(RotaRepository)
+    }
 
     @FieldResolver()
     public async criado_por(@Root() rota: Rota) {
@@ -19,42 +36,39 @@ export default class RotaResolver {
     }
 
     @Query(() => [Rota])
-    public async rotas(@Arg("limit") limit: number = 10, @Arg("offset") offset: number = 0) {
-        return Rota.find({ take: limit, skip: offset })
+    public async rotas(
+        @Arg("limit", { defaultValue: 10 }) limit: number,
+        @Arg("offset", { defaultValue: 0 }) offset: number,
+        @Arg("situacao", type => SituacaoRota, { defaultValue: SituacaoRota.TODOS }) situacao: SituacaoRota) {
+        let where = {}
+        if (situacao != SituacaoRota.TODOS) {
+            where = { situacao_rota: situacao }
+        }
+        return this.repository.find(limit, offset, where)
     }
 
     @Query(() => Rota)
     public async rota(@Arg("id") id: number) {
-        return Rota.findOne({ where: { id } })
+        return this.repository.findOne({ id })
     }
 
     @Mutation(() => Rota)
     public async saveRota(
         @Arg("data") data: RotaCreateInput,
-        @PubSub('ROTA_ADD') publish: Publisher<Rota>) 
-    {
-        const rota = Rota.create(data)
-        await rota.save()
+        @PubSub('ROTA_ADD') publish: Publisher<Rota>) {
+        const rota = await this.repository.save(data as Rota)
         await publish(rota)
         return rota
     }
 
     @Mutation(() => Rota)
     public async updateRota(@Arg("data") data: RotaUpdateInput) {
-        const rota = await Rota.findOne({ where: { id: data.id } })
-
-        if (!rota) {
-            throw new DefaultAppError('Rota nao existe')
-        }
-
-        Object.assign(rota, data)
-        await rota.save()
-        return rota
+        return this.repository.update(data as Rota)
     }
 
     @Mutation(() => Boolean)
     public async deleteRota(@Arg("id") id: number) {
-        return !!Rota.delete({ id })
+        return this.repository.delete(id)
     }
 
     @Subscription({ topics: 'ROTA_ADD' })

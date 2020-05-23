@@ -5,6 +5,7 @@ import PessoaResolver from "../modules/pessoa/graphql/resolvers/PessoaResolver";
 import RotaResolver from "../modules/rota/graphql/RotaResolver";
 import OrigemResolver from "../modules/origem/graphql/resolver/OrigemResolver";
 import VeiculoResolver from "../modules/veiculo/graphql/resolver/VeiculoResolver";
+import TotalVeiculosResolver from "../modules/veiculo/graphql/resolver/TotalVeiculosResolver";
 
 export default async function BuiltSchema(): Promise<GraphQLSchema> {
     return await buildSchema({ 
@@ -13,7 +14,8 @@ export default async function BuiltSchema(): Promise<GraphQLSchema> {
             PessoaResolver,
             RotaResolver,
             OrigemResolver,
-            VeiculoResolver
+            VeiculoResolver,
+            TotalVeiculosResolver
         ],
         nullableByDefault: true
     })
