@@ -1,4 +1,5 @@
 import { InputType, Field } from "type-graphql";
+import TipoPessoa from "../../TipoPessoa.num";
 
 @InputType()
 export default class PessoaCreateInput {
@@ -48,7 +49,7 @@ export default class PessoaCreateInput {
     @Field({ nullable: true })
     cpf?: string
 
-    @Field()
-    tipo: string
+    @Field(type => TipoPessoa, { defaultValue: TipoPessoa.ADMINISTRADOR })
+    tipo: TipoPessoa
 
 }

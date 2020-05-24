@@ -3,14 +3,14 @@ import UsuarioAcesso from "../../usuarioacesso/model/UsuarioAcesso";
 import Matriz from "../../matriz/model/Matriz";
 import DefaultAppError from "../../../errors/DefaultAppError";
 import Pessoa from "../../pessoa/model/Pessoa";
-import tipoPessoa from "../../../enum/tipoPessoa";
 import { hash } from 'bcryptjs'
+import TipoPessoa from "../../pessoa/TipoPessoa.num";
 
 interface IntegracaoProps {
     nome: string
     login: string
     senha: string
-    tipo: string
+    email: string
     identificadorSistemaOrigem: string
 }
 
@@ -26,7 +26,7 @@ export default class IntegracaoUsuarioService {
         nome,
         login,
         senha,
-        tipo,
+        email,
         identificadorSistemaOrigem }: IntegracaoProps): Promise<UsuarioAcesso> {
         const matrizRepo = getRepository(Matriz)
         const matriz = await matrizRepo.findOne({
@@ -37,7 +37,7 @@ export default class IntegracaoUsuarioService {
             throw new DefaultAppError('Matriz nao encontrada no processo de apuracao');
         }
 
-        const pessoa = await this.vincularPessoa(nome, '')
+        const pessoa = await this.vincularPessoa(nome, email)
         const hashedPassword = await hash(senha, 8)
 
         return await this.repository.save(
@@ -50,7 +50,7 @@ export default class IntegracaoUsuarioService {
             }))
     }
 
-    private async vincularPessoa(nome: string, tipo: string): Promise<Pessoa> {
+    private async vincularPessoa(nome: string, email: string): Promise<Pessoa> {
         const pessoaRepo = getRepository(Pessoa)
         return await pessoaRepo.save(pessoaRepo.create({
             bairro: '',
@@ -58,7 +58,7 @@ export default class IntegracaoUsuarioService {
             cnh: '',
             complemento: '',
             cpf: '',
-            email: `${nome}@binno.com`,
+            email: email,
             estado: '',
             logradouro: '',
             municipio: '',
@@ -67,8 +67,8 @@ export default class IntegracaoUsuarioService {
             pais: '',
             primeiro_nome: nome,
             rg: '',
-            tipo: tipoPessoa.NAO_DEFINIDO.description,
-            ultimo_nome: ''
+            ultimo_nome: '',
+            tipo: TipoPessoa.ADMINISTRADOR
         }))
     }
 }

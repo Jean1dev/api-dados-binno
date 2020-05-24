@@ -1,6 +1,13 @@
-import { Controller, Post, Req, Res } from "routing-controllers";
-import { Request, Response } from "express";
+import { Controller, Post, OnUndefined, Body } from "routing-controllers";
 import IntegracaoUsuarioService from "./IntegracaoUsuarioService";
+
+interface UsuarioIntegracaoPayload {
+    nome: string
+    login: string
+    senha: string
+    email: string
+    identificadorSistemaOrigem: string
+}
 
 @Controller()
 export class IntegracaoUsuarioController {
@@ -11,24 +18,21 @@ export class IntegracaoUsuarioController {
     }
 
     @Post('/integracao/usuario-acesso')
-    public async integrar(@Req() req: Request,@Res() res: Response ): Promise<Response> {
-        const { usuario } = req.body
-        const {
-            nome,
-            login,
-            senha,
-            tipo,
-            pertenceAQualCliente: identificadorSistemaOrigem
-        } = usuario
+    @OnUndefined(204)
+    public async integrar(@Body() {
+        nome,
+        login,
+        senha,
+        email,
+        identificadorSistemaOrigem
+    }: UsuarioIntegracaoPayload): Promise<void> {
         
         await this.service.integrar({
             nome,
             login,
             senha,
-            tipo,
+            email,
             identificadorSistemaOrigem
         })
-
-        return res.json()
     }
 }
