@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Rota from "../../rota/model/Rota";
 import Veiculo from "../../veiculo/model/Veiculo";
+import TipoPessoa from "../TipoPessoa.num";
 
 @Entity('pessoa')
 @ObjectType()
@@ -71,9 +72,9 @@ export default class Pessoa extends BaseEntity {
     @Field(() => String)
     cpf: string
 
-    @Column()
-    @Field(() => String)
-    tipo: string
+    @Column('int')
+    @Field(type => TipoPessoa)
+    tipo: TipoPessoa
 
     @Field(() => [ Rota ])
     rotas?: [ Rota ]

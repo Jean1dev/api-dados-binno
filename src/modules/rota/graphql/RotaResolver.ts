@@ -16,13 +16,16 @@ import Pessoa from "../../pessoa/model/Pessoa";
 import SituacaoRota from "../SituacaoRota.enum";
 import RotaRepository from "../repository/RotaRepository";
 import { container } from "tsyringe";
+import RotaService from "../service/RotaService";
 
 @Resolver(Rota)
 export default class RotaResolver {
     private repository: RotaRepository
+    private service: RotaService
 
     constructor() {
         this.repository = container.resolve(RotaRepository)
+        this.service = container.resolve(RotaService)
     }
 
     @FieldResolver()
@@ -33,6 +36,11 @@ export default class RotaResolver {
     @FieldResolver()
     public async enviado_para(@Root() rota: Rota) {
         return Pessoa.findOne({ where: { id: rota.enviado_para } })
+    }
+
+    @FieldResolver()
+    public async rota_calculada(@Root() rota: Rota) {
+        return this.service.consultarRotaCalculada(rota.rota_calculada)
     }
 
     @Query(() => [Rota])

@@ -1,13 +1,13 @@
 import 'reflect-metadata'
 import './database/typeOrm'
-import express, { Request, Response, NextFunction } from 'express'
+import express from 'express'
 import 'express-async-errors'
 import { ApolloServer } from 'apollo-server-express'
 import http, { Server } from 'http'
 import Routes, { registerController } from './routes'
 import { useExpressServer } from 'routing-controllers'
-import DefaultAppError from './errors/DefaultAppError'
 import BuildSchema from './graphql/builtSchema'
+import { errorHandler } from './errors/CustomExpressErrorHandler'
 
 class App {
 
@@ -63,25 +63,13 @@ class App {
         this.express.use(Routes)
         useExpressServer(this.express, {
             routePrefix: '/dados',
-            controllers: registerController()
+            controllers: registerController(),
+            defaultErrorHandler: false
         })
     }
 
     private exceptionHandler(): void {
-        this.express.use((error: Error, request: Request, response: Response, next: NextFunction) => {
-            if (error instanceof DefaultAppError ) {
-                return response.status(error.statusCode).json({
-                    status: 'error',
-                    message: error.message
-                })
-            }
-
-            console.error(error)
-            return response.status(500).json({
-                status: 'error',
-                message: 'Internal server error'
-            })
-        })
+        this.express.use(errorHandler)
     }
 
     public logs(): void {
