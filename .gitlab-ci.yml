@@ -18,6 +18,7 @@ install_dependencies:
   artifacts:
     paths:
       - node_modules/
+    expire_in: 1 week
 
 compile_typescript:
   stage: build
@@ -28,6 +29,7 @@ compile_typescript:
   artifacts:
     paths:
       - dist/
+    expire_in: 1 week
 
 configure_databse:
   stage: db_migrate
