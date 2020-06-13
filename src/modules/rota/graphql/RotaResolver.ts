@@ -8,6 +8,9 @@ import {
     Subscription,
     PubSub,
     Publisher,
+    Authorized,
+    Args,
+    PubSubEngine,
 } from "type-graphql";
 import Rota from "../model/Rota";
 import RotaCreateInput from "./inputs/RotaCreateInput";
@@ -17,6 +20,7 @@ import SituacaoRota from "../SituacaoRota.enum";
 import RotaRepository from "../repository/RotaRepository";
 import { container } from "tsyringe";
 import RotaService from "../service/RotaService";
+import PosicaoMotorista, { PosicaoMotoristaInput } from "./types/PosicaoMotorista";
 
 @Resolver(Rota)
 export default class RotaResolver {
@@ -60,18 +64,37 @@ export default class RotaResolver {
         return this.repository.findOne({ id })
     }
 
+    @Authorized()
+    @Query(() => [Rota])
+    public async rotasParaOMotorista(
+        @Arg("motorista_id") motorista_id: number,
+        @Arg("situacao", type => SituacaoRota) situacao: SituacaoRota) {
+
+        return this.repository.find(undefined, undefined, {
+            enviado_para: motorista_id,
+            situacao_rota: situacao
+        });
+    }
+
     @Mutation(() => Rota)
     public async saveRota(
-        @Arg("data") data: RotaCreateInput,
-        @PubSub('ROTA_ADD') publish: Publisher<Rota>) {
-        const rota = await this.repository.save(data as Rota)
-        await publish(rota)
-        return rota
+        @Arg("data") data: RotaCreateInput) {
+        return this.repository.save(data as Rota)
+    }
+
+    @Authorized()
+    @Mutation(() => Boolean)
+    public async confirmarRota(
+        @Arg("id") id: number,
+        @PubSub() pubSub: PubSubEngine) {
+        const rota = await this.service.confirmarRota(id)
+        await pubSub.publish(`rota_confirmada_topic_${rota.id}`, rota);
+        return true
     }
 
     @Mutation(() => Rota)
     public async updateRota(@Arg("data") data: RotaUpdateInput) {
-        return this.repository.update(data as Rota)
+        return this.service.atualizarRota(data as Rota)
     }
 
     @Mutation(() => Boolean)
@@ -79,8 +102,27 @@ export default class RotaResolver {
         return this.repository.delete(id)
     }
 
-    @Subscription({ topics: 'ROTA_ADD' })
-    rotaCriadaObserver(@Root() rota: Rota): Rota {
+    @Authorized()
+    @Mutation(() => Boolean)
+    public async atualizarPosicaoRota(
+        @Arg('data') data: PosicaoMotoristaInput,
+        @PubSub() pubSub: PubSubEngine) {
+
+        await pubSub.publish(`andamento_rota_topic_${data.id_rota}`, data)
+        return true
+    }
+
+    @Subscription({ topics: ({ args }) => args.topic })
+    public rotaCriadaObserver(
+        @Arg("topic") topic: string,
+        @Root() rota: Rota): Rota {
         return rota
+    }
+
+    @Subscription({ topics: ({ args }) => args.topic })
+    public andamentoDaRotaObserver(
+        @Arg("topic") topic: string,
+        @Root() data: PosicaoMotorista): PosicaoMotorista {
+        return data
     }
 }

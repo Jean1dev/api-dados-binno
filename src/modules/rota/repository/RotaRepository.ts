@@ -8,25 +8,29 @@ import DefaultAppError from "../../../errors/DefaultAppError";
 @singleton()
 export default class RotaRepository extends BasicRepository<Rota> implements IRotaRepository {
 
-    constructor() {
-        super(getRepository(Rota))
+    constructor() { super(getRepository(Rota)) }
+
+    public async onlyUpdate(id: number, updatable: object): Promise<void> {
+        await this.repository.update({ id }, updatable)
     }
 
     public async save(data: Rota): Promise<Rota> {
-        const rota = Rota.create(data)
+        const rota = new Rota.Builder().buildFrom(data)
         await rota.save()
         return rota
     }
 
     public async update(data: Rota): Promise<Rota> {
-        const rota = await Rota.findOne({ where: { id: data.id } })
-
+        const rota = await this.repository.findOne({ where: { id: data.id } })
+        
         if (!rota) {
             throw new DefaultAppError('Rota nao existe')
         }
 
-        Object.assign(rota, data)
-        await rota.save()
+        Object.assign(rota, data) // Object assing transform o id em String ai buga o save
+        rota.id = Number(rota.id)
+        
+        await this.repository.save(rota)
         return rota
     }
 

@@ -4,7 +4,8 @@ enum SituacaoRota {
     TODOS,
     PLANEJADA,
     EM_ANDAMENTO,
-    CONCLUIDA
+    CONCLUIDA,
+    CANCELADA_PELO_MOTORISTA
 }
 
 registerEnumType(SituacaoRota, {

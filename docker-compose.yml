@@ -1,0 +1,21 @@
+version: '3.4'
+
+services: 
+  postgres:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "binno_db"
+      POSTGRES_USER: "jeanfernandes"
+      POSTGRES_PASSWORD: "admin"
+    volumes:
+      - "./volumes/postgres/:/var/lib/postgresql/data/"
+    container_name: pg
+
+  api-dados:
+    build: .
+    ports: 
+      - "8082:8082"
+    command: npm start
+    container_name: dados

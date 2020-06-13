@@ -6,6 +6,7 @@ import RotaResolver from "../modules/rota/graphql/RotaResolver";
 import OrigemResolver from "../modules/origem/graphql/resolver/OrigemResolver";
 import VeiculoResolver from "../modules/veiculo/graphql/resolver/VeiculoResolver";
 import TotalVeiculosResolver from "../modules/veiculo/graphql/resolver/TotalVeiculosResolver";
+import { customAuthChecker } from "../middlewares/customAuthCheck";
 
 export default async function BuiltSchema(): Promise<GraphQLSchema> {
     return await buildSchema({ 
@@ -17,6 +18,7 @@ export default async function BuiltSchema(): Promise<GraphQLSchema> {
             VeiculoResolver,
             TotalVeiculosResolver
         ],
-        nullableByDefault: true
+        nullableByDefault: true,
+        authChecker: customAuthChecker
     })
 }
