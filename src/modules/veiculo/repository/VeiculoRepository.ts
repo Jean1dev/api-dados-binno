@@ -11,6 +11,13 @@ export default class VeiculoRepository extends BasicRepository<Veiculo> implemen
     constructor() {
         super(getRepository(Veiculo))
     }
+    public async encontrarEAtualizarStatusVeiculo(motorista_id: number, estaEmUso: boolean): Promise<void> {
+        await this.repository.update({
+            pessoa_id: motorista_id
+        }, {
+            veiculo_esta_sendo_utilizado_no_momento: estaEmUso
+        })
+    }
 
     public async getTotalVeiculosRodados(): Promise<number> {
         return this.repository.count({

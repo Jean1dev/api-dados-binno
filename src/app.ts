@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import './database/typeOrm'
-import express from 'express'
+import express, { Request } from 'express'
 import 'express-async-errors'
 import { ApolloServer } from 'apollo-server-express'
 import http, { Server } from 'http'
@@ -8,9 +8,12 @@ import Routes, { registerController } from './routes'
 import { useExpressServer } from 'routing-controllers'
 import BuildSchema from './graphql/builtSchema'
 import { errorHandler } from './errors/CustomExpressErrorHandler'
+import * as Sentry from '@sentry/node';
+require('appmetrics-dash').attach()
 
 class App {
 
+    private port: number = 8082
     private express: express.Application
     private server: ApolloServer
     public httpServer: Server
@@ -20,6 +23,7 @@ class App {
     }
 
     public start(port: number = 8082): void {
+        this.port = port
         this.httpServer.listen(port, () => {
             console.log('api-dados on ', port)
             this.logs()
@@ -42,11 +46,15 @@ class App {
         this.server.applyMiddleware({ app: this.express })
         this.server.installSubscriptionHandlers(this.httpServer)
     }
-    private configureGraphQlContext(): object {
-        return {
-            db: null,
-            transaction: null,
-            repository: null
+
+    private configureGraphQlContext(): Function {
+        return (req: Request) => {
+            const context = {
+                req,
+                user: 'req.user', // `req.user` comes from `express-jwt`
+            };
+
+            return context;
         }
     }
 
@@ -55,7 +63,7 @@ class App {
     }
 
     private monitoringServer(): void {
-
+        Sentry.init({ dsn: 'https://f91ad114a17d468ca8ff8e964e1be43f@o318666.ingest.sentry.io/5267522' });
     }
 
     private routes(): void {
@@ -73,8 +81,9 @@ class App {
     }
 
     public logs(): void {
-        console.log(`🚀 Server ready at http://localhost:${this.server.graphqlPath}`)
-        console.log(`🚀 Subscriptions ready at ws://localhost:${this.server.subscriptionsPath}`)
+        console.log(`🚀 Server ready at http://localhost:${this.port}${this.server.graphqlPath}`)
+        console.log(`🚀 Subscriptions ready at ws://localhost:${this.port}${this.server.subscriptionsPath}`)
+        console.log(`🚀 Monitoring api in http://localhost:${this.port}/appmetrics-dash`)
     }
 }
 

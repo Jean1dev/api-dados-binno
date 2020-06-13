@@ -1,4 +1,4 @@
-FROM node:8.11-alpine
+FROM nikolaik/python-nodejs:latest
 
 WORKDIR /usr/src/app
 
@@ -13,5 +13,6 @@ COPY . /usr/src/app
 RUN npm run build
 ENV PORT 8082
 ENV URL DOCKER
+ENV HOST_DB postgres
 EXPOSE $PORT
 CMD [ "npm", "start" ]

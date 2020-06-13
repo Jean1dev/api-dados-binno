@@ -11,7 +11,7 @@ export default class BasicRepository<T extends BaseEntity> {
         return this.repository.findOne({ where: filter })
     }
 
-    public async find(limit: number, offset: number, filter: object = {}): Promise<T[]> {
-       return this.repository.find({ take: limit, skip: offset, where: { filter } })
+    public async find(limit: number = 10, offset: number = 0, filter: object = {}): Promise<T[]> {
+       return this.repository.find({ take: limit, skip: offset, where: filter })
     }
 }

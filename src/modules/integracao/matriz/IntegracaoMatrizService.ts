@@ -21,14 +21,14 @@ export default class IntegracaoMatrizService {
         nome,
         contato,
         cnpj = '' }: IntegracaoProps): Promise<Matriz> {
-        const matriz = this.repository.create({
-            identificador_sistema_origem: identificadorSistemaOrigem,
-            nome,
-            contato,
-            cnpj,
-            telefone: contato,
-            site: ''
-        })
+        const matriz = new Matriz.Builder()
+            .identificadorSistemaOrigem(identificadorSistemaOrigem)
+            .nome(nome)
+            .contato(contato)
+            .cnpj(cnpj)
+            .telefone(contato)
+            .site('')
+            .build()
 
         await this.repository.save(matriz)
 

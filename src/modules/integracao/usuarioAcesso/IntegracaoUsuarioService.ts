@@ -39,36 +39,36 @@ export default class IntegracaoUsuarioService {
 
         const pessoa = await this.vincularPessoa(nome, email)
         const hashedPassword = await hash(senha, 8)
+        const usuarioAcesso = new UsuarioAcesso.Builder()
+            .identificadorSistemaOrigem(identificadorSistemaOrigem)
+            .login(login)
+            .password(hashedPassword)
+            .pessoa(pessoa.id)
+            .matriz(matriz.id)
+            .build()
 
-        return await this.repository.save(
-            this.repository.create({
-                identificador_sistema_origem: identificadorSistemaOrigem,
-                login: login,
-                password: hashedPassword,
-                pessoa: pessoa.id,
-                matriz: matriz.id,
-            }))
+        return await this.repository.save(usuarioAcesso)
     }
 
     private async vincularPessoa(nome: string, email: string): Promise<Pessoa> {
         const pessoaRepo = getRepository(Pessoa)
-        return await pessoaRepo.save(pessoaRepo.create({
-            bairro: '',
-            cep: '',
-            cnh: '',
-            complemento: '',
-            cpf: '',
-            email: email,
-            estado: '',
-            logradouro: '',
-            municipio: '',
-            numero: '',
-            observacao: '',
-            pais: '',
-            primeiro_nome: nome,
-            rg: '',
-            ultimo_nome: '',
-            tipo: TipoPessoa.ADMINISTRADOR
-        }))
+        const pessoa = new Pessoa.Builder()
+            .bairro('')
+            .cep('')
+            .cnh('')
+            .complemento('')
+            .email(email)
+            .estado('')
+            .logradouro('')
+            .numero('')
+            .observacao('')
+            .pais('')
+            .primeiro_nome(nome)
+            .rg('')
+            .ultimo_nome('')
+            .tipo(TipoPessoa.ADMINISTRADOR)
+            .build()
+
+        return await pessoaRepo.save(pessoa)
     }
 }

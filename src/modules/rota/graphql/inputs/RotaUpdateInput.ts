@@ -21,4 +21,7 @@ export default class RotaUpdateInput {
 
     @Field(type => SituacaoRota, { defaultValue: SituacaoRota.PLANEJADA })
     situacao_rota: SituacaoRota
+
+    @Field()
+    rota_calculada?: string
 }
