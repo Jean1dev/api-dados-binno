@@ -62,6 +62,8 @@ export default class IntegracaoUsuarioService {
             .email(email)
             .estado('')
             .logradouro('')
+            .municipio('')
+            .cpf('')
             .numero('')
             .observacao('')
             .pais('')
