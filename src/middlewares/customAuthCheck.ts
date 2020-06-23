@@ -12,9 +12,10 @@ interface TokenPayload {
 }
 
 export const customAuthChecker: AuthChecker = (
-  { root, args, context, info },
+  props: any,
   roles,
 ) => {
+  const { root, args, context, info } = props
   const auth = context.request.req.headers.authorization
 
   if (!auth) {
