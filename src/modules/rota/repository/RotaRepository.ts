@@ -15,9 +15,7 @@ export default class RotaRepository extends BasicRepository<Rota> implements IRo
     }
 
     public async save(data: Rota): Promise<Rota> {
-        const rota = new Rota.Builder().buildFrom(data)
-        await rota.save()
-        return rota
+        return super.save(new Rota.Builder().buildFrom(data))
     }
 
     public async update(data: Rota): Promise<Rota> {
@@ -26,7 +24,7 @@ export default class RotaRepository extends BasicRepository<Rota> implements IRo
         if (!rota) {
             throw new DefaultAppError('Rota nao existe')
         }
-
+        
         Object.assign(rota, data) // Object assing transform o id em String ai buga o save
         rota.id = Number(rota.id)
         

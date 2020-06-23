@@ -49,8 +49,16 @@ export default class Veiculo extends BaseEntity {
     @Column()
     veiculo_esta_sendo_utilizado_no_momento: boolean
 
+    @Column()
+    matriz_id: number
+
     static Builder = class VeiculoBuilder extends Builder<Veiculo> {
         constructor() { super(new Veiculo()) }
+
+        matriz_id(matriz_id: number): this {
+            this.entity.matriz_id = matriz_id
+            return this
+        }
 
         placa(placa: string): this {
             this.entity.placa = placa

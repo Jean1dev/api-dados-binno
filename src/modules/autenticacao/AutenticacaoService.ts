@@ -38,7 +38,7 @@ export default class AutenticacaoService {
 
         const token = sign({}, config.JWT_SECRET, {
             expiresIn: '7d',
-            subject: String(user.id)
+            subject: String(user.matriz)
         })
 
         delete user.password

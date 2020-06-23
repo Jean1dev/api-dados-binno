@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field, ID, Float } from "type-graphql";
 import Pessoa from "../../pessoa/model/Pessoa";
 import SituacaoRota from "../SituacaoRota.enum";
 import Builder from "../../../shared/Builder";
@@ -11,6 +11,26 @@ export default class Rota extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
     @Field(() => Number)
     id: number
+
+    @Column()
+    @Field(() => String)
+    nome: string
+
+    @Column()
+    @Field(() => Number)
+    qtdEntregas: number
+
+    @Column()
+    @Field(() => Float)
+    kilometragem: number
+
+    @Column()
+    @Field(() => String)
+    tempoEstimado: string
+
+    @Column()
+    @Field(() => String)
+    localDePartida: string
 
     @Column()
     @Field(() => String)
@@ -30,21 +50,54 @@ export default class Rota extends BaseEntity {
 
     @Column()
     @Field(() => Pessoa)
-    criado_por:number
+    criado_por: number
 
     @Column()
     @Field(() => Pessoa)
-    enviado_para:number
+    enviado_para: number
 
     @Column('int')
     @Field(type => SituacaoRota)
     situacao_rota: SituacaoRota
+
+    @Column()
+    matriz_id: number
 
     static Builder = class RotaBuilder extends Builder<Rota> {
         constructor() { super(new Rota()) }
 
         buildFrom(data: Rota): Rota {
             return Rota.create(data)
+        }
+
+        matriz_id(matriz_id: number): this {
+            this.entity.matriz_id = matriz_id
+            return this
+        }
+
+        qtdEntregas(qtdEntregas: number): this {
+            this.entity.qtdEntregas = qtdEntregas
+            return this
+        }
+
+        kilometragem(kilometragem: number): this {
+            this.entity.kilometragem = kilometragem
+            return this
+        }
+
+        tempoEstimado(tempoEstimado: string): this {
+            this.entity.tempoEstimado = tempoEstimado
+            return this
+        }
+
+        localDePartida(localDePartida: string): this {
+            this.entity.localDePartida = localDePartida
+            return this
+        }
+
+        nome(nome: string): this {
+            this.entity.nome = nome
+            return this
         }
 
         rota_calculada(rota_calculada: string): this {

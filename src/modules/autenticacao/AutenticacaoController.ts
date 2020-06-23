@@ -17,6 +17,6 @@ export class AutenticacaoController {
 
     @Post('/autenticar')
     public async autenticar(@Body() { login, password }: autenticacaoPayload): Promise<object> {
-        return await this.service.autenticar({ login, password })
+        return this.service.autenticar({ login, password })
     }
 }
