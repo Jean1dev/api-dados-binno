@@ -50,7 +50,7 @@ class App {
     private configureGraphQlContext(): Function {
         return (req: Request) => {
             const context = {
-                req,
+                request: req,
                 user: 'req.user', // `req.user` comes from `express-jwt`
             };
 

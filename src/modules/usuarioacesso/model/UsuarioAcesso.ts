@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import Builder from "../../../shared/Builder";
 
 @Entity('usuario_acesso')
-export default class UsuarioAcesso {
+export default class UsuarioAcesso extends BaseEntity {
 
     @PrimaryGeneratedColumn('increment')
     id: number

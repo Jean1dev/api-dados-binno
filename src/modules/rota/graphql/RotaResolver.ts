@@ -47,6 +47,7 @@ export default class RotaResolver {
         return this.service.consultarRotaCalculada(rota.rota_calculada)
     }
 
+    @Authorized()
     @Query(() => [Rota])
     public async rotas(
         @Arg("limit", { defaultValue: 10 }) limit: number,
@@ -112,12 +113,12 @@ export default class RotaResolver {
         return true
     }
 
-    @Subscription({ topics: ({ args }) => args.topic })
-    public rotaCriadaObserver(
-        @Arg("topic") topic: string,
-        @Root() rota: Rota): Rota {
-        return rota
-    }
+    // @Subscription({ topics: ({ args }) => args.topic })
+    // public rotaCriadaObserver(
+    //     @Arg("topic") topic: string,
+    //     @Root() rota: Rota): Rota {
+    //     return rota
+    // }
 
     @Subscription({ topics: ({ args }) => args.topic })
     public andamentoDaRotaObserver(

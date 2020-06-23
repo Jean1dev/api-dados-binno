@@ -7,6 +7,9 @@ export default class RotaUpdateInput {
     @Field(() => ID)
     id: number
 
+    @Field({ nullable: true })
+    nome?: string
+
     @Field(() => Int, { nullable: true })
     enviado_para?: number
 

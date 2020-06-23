@@ -7,6 +7,9 @@ export default class RotaCreateInput {
     @Field()
     rota_calculada: string
 
+    @Field({ nullable: true })
+    nome?: string
+
     @Field(() => Int)
     criado_por: number
 

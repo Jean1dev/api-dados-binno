@@ -14,7 +14,7 @@ export default class PessoaRepository extends BasicRepository<Pessoa> implements
 
     public async save(data: Pessoa): Promise<Pessoa> {
         const pessoa = Pessoa.create(data)
-        await pessoa.save()
+        await super.save(pessoa)
         return pessoa
     }
 

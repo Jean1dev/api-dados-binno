@@ -83,9 +83,17 @@ export default class Pessoa extends BaseEntity {
     @Field(() => [Veiculo])
     veiculos?: [Veiculo]
 
+    @Column()
+    matriz_id: number
+
     static Builder = class PessoaBuilder extends Builder<Pessoa> {
 
         constructor() { super(new Pessoa()) }
+
+        matriz_id(matriz_id: number): this {
+            this.entity.matriz_id = matriz_id
+            return this
+        }
 
         primeiro_nome(nome: string): this {
             this.entity.primeiro_nome = nome
