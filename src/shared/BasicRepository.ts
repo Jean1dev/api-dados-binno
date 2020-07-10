@@ -1,6 +1,8 @@
-import { Repository, BaseEntity, DeepPartial } from "typeorm";
+import { Repository, BaseEntity, DeepPartial, SelectQueryBuilder } from "typeorm";
 import AuthenticationHolder from "../context/AuthenticationHolder";
 import { container } from "tsyringe";
+import { isEmpty } from "./functions";
+import FilterQueryBuilder from "./FilterQueryBuilder";
 
 export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
     public repository: Repository<T>
@@ -17,8 +19,17 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
 
     public async find(limit: number = 10, offset: number = 0, filter: any = {}): Promise<T[]> {
         const { matriz_id } = this.authenticationHolder.getAuthenticationData()
-        filter.matriz_id = matriz_id
-        return this.repository.find({ take: limit, skip: offset, where: filter })
+        if (isEmpty(filter)) {
+            filter.matriz_id = matriz_id
+            return this.repository.find({ take: limit, skip: offset, where: filter })
+        }
+
+        return new FilterQueryBuilder<T>(this.repository, filter)
+            .build()
+            .andWhere(`matriz_id = ${matriz_id}`)
+            .limit(limit)
+            .offset(offset)
+            .getMany()
     }
 
     public async save(entity: any): Promise<T> {
