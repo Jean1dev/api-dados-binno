@@ -7,6 +7,7 @@ import PessoaRepository from "../../repository/PessoaRepository";
 import { container } from "tsyringe";
 import Veiculo from "../../../veiculo/model/Veiculo";
 import PessoaService from "../../service/PessoaService";
+import FiltersExpression from "../../../../graphql/shared/FiltersExpression";
 
 @Resolver(Pessoa)
 export default class PessoaResolver {
@@ -32,8 +33,9 @@ export default class PessoaResolver {
     @Query(() => [Pessoa])
     public async pessoas(
         @Arg("limit", { defaultValue: 10 }) limit: number, 
-        @Arg("offset", { defaultValue: 0}) offset: number) {
-        return this.repository.find(limit, offset)
+        @Arg("offset", { defaultValue: 0}) offset: number,
+        @Arg("filters", { defaultValue: null }) filters: FiltersExpression) {
+        return this.repository.find(limit, offset, filters)
     }
 
     @Query(() => Pessoa)

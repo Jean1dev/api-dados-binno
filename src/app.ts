@@ -31,6 +31,7 @@ class App {
     }
 
     public async configure(): Promise<void> {
+        this.monitoringServer()
         const schema = await BuildSchema()
         this.server = new ApolloServer({
             schema: schema,
@@ -40,7 +41,6 @@ class App {
         })
         this.httpServer = http.createServer(this.express)
         this.middlewares()
-        this.monitoringServer()
         this.routes()
         this.exceptionHandler()
         this.server.applyMiddleware({ app: this.express })
@@ -59,6 +59,7 @@ class App {
     }
 
     private middlewares(): void {
+        this.express.use(Sentry.Handlers.requestHandler())
         this.express.use(express.json())
     }
 
@@ -77,6 +78,7 @@ class App {
     }
 
     private exceptionHandler(): void {
+        this.express.use(Sentry.Handlers.errorHandler())
         this.express.use(errorHandler)
     }
 
