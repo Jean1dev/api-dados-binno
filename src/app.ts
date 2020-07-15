@@ -8,7 +8,8 @@ import Routes, { registerController } from './routes'
 import { useExpressServer } from 'routing-controllers'
 import BuildSchema from './graphql/builtSchema'
 import { errorHandler } from './errors/CustomExpressErrorHandler'
-import * as Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node'
+import cors from 'cors'
 require('appmetrics-dash').attach()
 
 class App {
@@ -59,6 +60,7 @@ class App {
     }
 
     private middlewares(): void {
+        this.express.use(cors()) //TODO:: remover futuramente
         this.express.use(Sentry.Handlers.requestHandler())
         this.express.use(express.json())
     }
