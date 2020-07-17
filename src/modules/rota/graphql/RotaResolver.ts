@@ -7,13 +7,10 @@ import {
     Root,
     Subscription,
     PubSub,
-    Publisher,
     Authorized,
-    Args,
     PubSubEngine,
 } from "type-graphql";
 import Rota from "../model/Rota";
-import RotaCreateInput from "./inputs/RotaCreateInput";
 import RotaUpdateInput from "./inputs/RotaUpdateInput";
 import Pessoa from "../../pessoa/model/Pessoa";
 import SituacaoRota from "../SituacaoRota.enum";
@@ -40,11 +37,6 @@ export default class RotaResolver {
     @FieldResolver()
     public async enviado_para(@Root() rota: Rota) {
         return Pessoa.findOne({ where: { id: rota.enviado_para } })
-    }
-
-    @FieldResolver()
-    public async rota_calculada(@Root() rota: Rota) {
-        return this.service.consultarRotaCalculada(rota.rota_calculada)
     }
 
     @Authorized()
@@ -77,12 +69,6 @@ export default class RotaResolver {
         });
     }
 
-    @Mutation(() => Rota)
-    public async saveRota(
-        @Arg("data") data: RotaCreateInput) {
-        return this.repository.save(data as Rota)
-    }
-
     @Authorized()
     @Mutation(() => Boolean)
     public async confirmarRota(
@@ -112,13 +98,6 @@ export default class RotaResolver {
         await pubSub.publish(`andamento_rota_topic_${data.id_rota}`, data)
         return true
     }
-
-    // @Subscription({ topics: ({ args }) => args.topic })
-    // public rotaCriadaObserver(
-    //     @Arg("topic") topic: string,
-    //     @Root() rota: Rota): Rota {
-    //     return rota
-    // }
 
     @Subscription({ topics: ({ args }) => args.topic })
     public andamentoDaRotaObserver(

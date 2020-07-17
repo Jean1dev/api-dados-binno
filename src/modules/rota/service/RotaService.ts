@@ -1,4 +1,4 @@
-import { singleton, container } from "tsyringe";
+import {singleton, container} from "tsyringe";
 import GeolocalizacaoClient from "../../../shared/RestClient/GeolocalizacaoClient";
 import RotaRepository from "../repository/RotaRepository";
 import DefaultAppError from "../../../errors/DefaultAppError";
@@ -18,18 +18,13 @@ export default class RotaService {
         this.veiculoRepository = container.resolve(VeiculoRepository)
     }
 
-    public async consultarRotaCalculada(idRota: string): Promise<string> {
-        const { data } = await this.geolocalizacaoClient.consultarRotaCalculada(idRota)
-        return JSON.stringify(data)
-    }
-
     public async confirmarRota(idRota: number): Promise<Rota> {
-        const rota = await this.repository.findOne({ id: idRota })
+        const rota = await this.repository.findOne({id: idRota})
         if (!rota) {
             throw new DefaultAppError('Rota nao existe')
         }
 
-        await this.repository.onlyUpdate(idRota, { confimada: true })
+        await this.repository.onlyUpdate(idRota, {confimada: true})
         await this.veiculoRepository.encontrarEAtualizarStatusVeiculo(rota.enviado_para, true)
         return rota
     }
