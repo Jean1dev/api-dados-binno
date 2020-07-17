@@ -2,6 +2,7 @@ import * as express from 'express'
 import { IntegracaoMatrizController } from './modules/integracao/matriz/IntegracaoMatrizController'
 import { IntegracaoUsuarioController } from './modules/integracao/usuarioAcesso/IntegracaoUsuarioController'
 import { AutenticacaoController } from './modules/autenticacao/AutenticacaoController'
+import RoteirizacaoController from "./modules/roterizacao/controller/RoteirizacaoController";
 
 const routes = express.Router()
 
@@ -14,5 +15,6 @@ export function registerController() {
         IntegracaoMatrizController,
         IntegracaoUsuarioController,
         AutenticacaoController,
+        RoteirizacaoController
     ]
 }

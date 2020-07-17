@@ -34,7 +34,7 @@ export default class PessoaResolver {
     public async pessoas(
         @Arg("limit", { defaultValue: 10 }) limit: number, 
         @Arg("offset", { defaultValue: 0}) offset: number,
-        @Arg("filters", { defaultValue: null }) filters: FiltersExpression) {
+        @Arg("filters", { defaultValue: {} }) filters: FiltersExpression) {
         return this.repository.find(limit, offset, filters)
     }
 

@@ -3,6 +3,8 @@ import { ObjectType, Field, ID, Float } from "type-graphql";
 import Pessoa from "../../pessoa/model/Pessoa";
 import SituacaoRota from "../SituacaoRota.enum";
 import Builder from "../../../shared/Builder";
+import Geocoding from "../../roterizacao/graphql/types/Geocoding";
+import {IGeocoding} from "../../roterizacao/model/Geocoding.model";
 
 @Entity('rota')
 @ObjectType()
@@ -32,9 +34,9 @@ export default class Rota extends BaseEntity {
     @Field(() => String)
     localDePartida: string
 
-    @Column()
-    @Field(() => String)
-    rota_calculada: string
+    @Column({ type: 'json'})
+    @Field(() => Geocoding)
+    geocoding: IGeocoding
 
     @Column()
     @Field(() => Boolean)
@@ -54,7 +56,7 @@ export default class Rota extends BaseEntity {
 
     @Column()
     @Field(() => Pessoa)
-    enviado_para: number
+    enviado_para?: number
 
     @Column('int')
     @Field(type => SituacaoRota)
@@ -100,8 +102,8 @@ export default class Rota extends BaseEntity {
             return this
         }
 
-        rota_calculada(rota_calculada: string): this {
-            this.entity.rota_calculada = rota_calculada
+        geocoding(geocoding: IGeocoding): this {
+            this.entity.geocoding = geocoding
             return this
         }
 
@@ -125,7 +127,7 @@ export default class Rota extends BaseEntity {
             return this
         }
 
-        enviado_para(enviado_para: number): this {
+        enviado_para(enviado_para: number | undefined): this {
             this.entity.enviado_para = enviado_para
             return this
         }

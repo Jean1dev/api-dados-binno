@@ -1,8 +1,9 @@
-import { Repository, BaseEntity, DeepPartial, SelectQueryBuilder } from "typeorm";
+import {Repository, BaseEntity, DeepPartial, SelectQueryBuilder, getRepository} from "typeorm";
 import AuthenticationHolder from "../context/AuthenticationHolder";
 import { container } from "tsyringe";
 import { isEmpty } from "./functions";
 import FilterQueryBuilder from "./FilterQueryBuilder";
+import Roteirizacao from "../modules/roterizacao/model/Roteirizacao";
 
 export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
     public repository: Repository<T>
@@ -36,5 +37,13 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
         const { matriz_id } = this.authenticationHolder.getAuthenticationData()
         entity.matriz_id = matriz_id
         return this.repository.save(entity)
+    }
+
+    delete(id: number): Promise<boolean> {
+        throw new Error('metodo nao sobrescrito')
+    }
+
+    update(data: T): Promise<T> {
+        throw new Error('metodo nao sobrescrito')
     }
 }

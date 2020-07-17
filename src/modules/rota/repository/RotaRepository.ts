@@ -25,7 +25,7 @@ export default class RotaRepository extends BasicRepository<Rota> implements IRo
             throw new DefaultAppError('Rota nao existe')
         }
         
-        Object.assign(rota, data) // Object assing transform o id em String ai buga o save
+        Object.assign(rota, data) // Object assing transforma o id em String ai buga o save
         rota.id = Number(rota.id)
         
         await this.repository.save(rota)
@@ -33,7 +33,7 @@ export default class RotaRepository extends BasicRepository<Rota> implements IRo
     }
 
     public async delete(id: number): Promise<boolean> {
-        return !!this.repository.delete({ id })
+        return !!await this.repository.delete({id})
     }
     
 }

@@ -1,4 +1,4 @@
-import { Repository, getRepository } from "typeorm";
+import {Repository, getRepository} from "typeorm";
 import UsuarioAcesso from "../../usuarioacesso/model/UsuarioAcesso";
 import Matriz from "../../matriz/model/Matriz";
 import DefaultAppError from "../../../errors/DefaultAppError";
@@ -37,7 +37,7 @@ export default class IntegracaoUsuarioService {
         })
 
         if (!matriz) {
-            throw new DefaultAppError('Matriz nao encontrada no processo de apuracao');
+            throw new DefaultAppError('Matriz nao encontrada no processo de integraçāo');
         }
 
         const pessoa = await this.vincularPessoa(nome, email, matriz.id)
