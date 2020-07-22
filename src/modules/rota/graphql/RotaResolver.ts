@@ -18,6 +18,7 @@ import RotaRepository from "../repository/RotaRepository";
 import { container } from "tsyringe";
 import RotaService from "../service/RotaService";
 import PosicaoMotorista, { PosicaoMotoristaInput } from "./types/PosicaoMotorista";
+import PaginatedRoute from "./types/PaginatedRoute";
 
 @Resolver(Rota)
 export default class RotaResolver {
@@ -40,7 +41,7 @@ export default class RotaResolver {
     }
 
     @Authorized()
-    @Query(() => [Rota])
+    @Query(() => PaginatedRoute)
     public async rotas(
         @Arg("limit", { defaultValue: 10 }) limit: number,
         @Arg("offset", { defaultValue: 0 }) offset: number,

@@ -8,6 +8,7 @@ import { container } from "tsyringe";
 import Veiculo from "../../../veiculo/model/Veiculo";
 import PessoaService from "../../service/PessoaService";
 import FiltersExpression from "../../../../graphql/shared/FiltersExpression";
+import PaginatedPessoa from "../types/PaginatedPessoa";
 
 @Resolver(Pessoa)
 export default class PessoaResolver {
@@ -30,12 +31,12 @@ export default class PessoaResolver {
     }
 
     @Authorized()
-    @Query(() => [Pessoa])
+    @Query(() => PaginatedPessoa)
     public async pessoas(
         @Arg("limit", { defaultValue: 10 }) limit: number, 
         @Arg("offset", { defaultValue: 0}) offset: number,
         @Arg("filters", { defaultValue: {} }) filters: FiltersExpression) {
-        return this.repository.find(limit, offset, filters)
+        return this.repository.findAllAndCount(limit, offset, filters)
     }
 
     @Query(() => Pessoa)

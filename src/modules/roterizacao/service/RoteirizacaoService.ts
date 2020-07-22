@@ -47,8 +47,8 @@ export default class RoteirizacaoService {
 
     public async roteirizar(payload: IPayload): Promise<Roteirizacao> {
         try {
-            const { data } = await this.geolocalizacaoClient.roteirizar(payload)
-            const { userAccess, matriz_id } = this.authenticationHolder.getAuthenticationData()
+            const {data} = await this.geolocalizacaoClient.roteirizar(payload)
+            const {userAccess, matriz_id} = this.authenticationHolder.getAuthenticationData()
 
             if (!userAccess || !matriz_id) {
                 throw new DefaultAppError('userAccess ou matriz_id nao fornecidos')
@@ -59,14 +59,14 @@ export default class RoteirizacaoService {
                 .pessoa_id(userAccess)
                 .geocoding(data)
                 .build())
-        }catch (e) {
-            throw new DefaultAppError('Ocorreu um erro ao criar o rascunho')
+        } catch (e) {
+            throw new DefaultAppError('Ocorreu um erro ao criar o rascunho', 400, e)
         }
     }
 
     public async criarRota(payload: IDadosRota): Promise<IRotaAndRascunho> {
         try {
-            const roteirizacao = await this.repository.findOne({ where: { id: payload.roteirizacaoId }})
+            const roteirizacao = await this.repository.findOne({where: {id: payload.roteirizacaoId}})
 
             if (!roteirizacao) {
                 throw new DefaultAppError('Roteirizacao inexistente')
@@ -85,7 +85,7 @@ export default class RoteirizacaoService {
                 roteirizacao
             }
         } catch (e) {
-            throw new DefaultAppError('Ocorreu um erro ao criar o rota')
+            throw new DefaultAppError('Ocorreu um erro ao criar o rota', 400, e)
         }
     }
 }

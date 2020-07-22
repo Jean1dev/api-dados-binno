@@ -1,10 +1,12 @@
 import Veiculo from "../../model/Veiculo";
-import { Resolver, Query, Arg, Mutation, FieldResolver, Root, Authorized } from "type-graphql";
+import {Resolver, Query, Arg, Mutation, FieldResolver, Root, Authorized} from "type-graphql";
 import VeiculoCreateInput from "../inputs/VeiculoCreateInput";
 import VeiculoUpdateInput from "../inputs/VeiculoUpdateInput";
 import Pessoa from "../../../pessoa/model/Pessoa";
 import VeiculoRepository from "../../repository/VeiculoRepository";
-import { container } from "tsyringe";
+import {container} from "tsyringe";
+import PaginatedVeiculo from "../types/PaginatedVeiculo";
+import FiltersExpression from "../../../../graphql/shared/FiltersExpression";
 
 @Resolver(Veiculo)
 export default class VeiculoResolver {
@@ -16,20 +18,21 @@ export default class VeiculoResolver {
 
     @FieldResolver()
     public async pessoa_id(@Root() veiculo: Veiculo) {
-        return Pessoa.findOne({ where: { id: veiculo.pessoa_id } })
+        return Pessoa.findOne({where: {id: veiculo.pessoa_id}})
     }
 
     @Authorized()
-    @Query(() => [Veiculo])
+    @Query(() => PaginatedVeiculo)
     public async veiculos(
-        @Arg("limit", { defaultValue: 10 }) limit: number,
-        @Arg("offset", { defaultValue: 0 }) offset: number) {
-        return this.repository.find(limit, offset)
+        @Arg("limit", {defaultValue: 10}) limit: number,
+        @Arg("offset", {defaultValue: 0}) offset: number,
+        @Arg("filters", {defaultValue: {}}) filters: FiltersExpression) {
+        return this.repository.findAllAndCount(limit, offset, filters)
     }
 
     @Query(() => Veiculo)
     public async veiculo(@Arg("id") id: number) {
-        return this.repository.findOne({ id })
+        return this.repository.findOne({id})
     }
 
     @Authorized()
@@ -47,6 +50,6 @@ export default class VeiculoResolver {
     @Authorized()
     @Mutation(() => Boolean)
     public async deleteVeiculo(@Arg("id") id: number) {
-        return !!Veiculo.delete({ id })
+        return !!await Veiculo.delete({id})
     }
 }

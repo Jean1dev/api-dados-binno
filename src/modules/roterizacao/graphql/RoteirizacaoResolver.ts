@@ -8,6 +8,7 @@ import RotaUnionRotaRascunho from "./types/rotaUnionRotaRascunho";
 import SituacaoRota from "../../rota/SituacaoRota.enum";
 import RoteirizacaoService from "../service/RoteirizacaoService";
 import GeocodingInput from "./inputs/GeocodingInput";
+import PaginatedRoteirizacao from "./types/PaginatedRoteirizacao";
 
 @Resolver(Roteirizacao)
 export default class RoteirizacaoResolver {
@@ -26,12 +27,12 @@ export default class RoteirizacaoResolver {
     }
 
     @Authorized()
-    @Query(() => [Roteirizacao])
+    @Query(() => PaginatedRoteirizacao)
     public async roteirizacoes(
         @Arg("limit", {defaultValue: 10}) limit: number,
         @Arg("offset", {defaultValue: 0}) offset: number,
         @Arg("filters", {defaultValue: {}}) filters: FiltersExpression) {
-        return this.repository.find(limit, offset, filters)
+        return this.repository.findAllAndCount(limit, offset, filters)
     }
 
     @Authorized()
