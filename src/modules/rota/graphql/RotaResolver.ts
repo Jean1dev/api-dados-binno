@@ -50,7 +50,7 @@ export default class RotaResolver {
         if (situacao != SituacaoRota.TODOS) {
             where = { situacao_rota: situacao }
         }
-        return this.repository.find(limit, offset, where)
+        return this.repository.findAllAndCount(limit, offset, where)
     }
 
     @Query(() => Rota)
