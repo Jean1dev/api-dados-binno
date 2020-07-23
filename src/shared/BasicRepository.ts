@@ -35,9 +35,9 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
 
     public async findAllAndCount(limit: number = 10, offset: number = 0, filter: any = {}): Promise<IConsultaDadosComTotais<T>> {
         const {matriz_id} = this.authenticationHolder.getAuthenticationData()
-        const total = await this.getTotal(matriz_id)
         if (!isNececessaryBuiltFilter(filter)) {
             filter.matriz_id = matriz_id
+            const total = await this.getTotal(matriz_id)
             const result = await this.repository.find({take: limit, skip: offset, where: filter})
 
             return {
@@ -45,6 +45,11 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
                 total
             }
         }
+
+        const total = await new FilterQueryBuilder<T>(this.repository, filter)
+            .build()
+            .andWhere(`matriz_id = ${matriz_id}`)
+            .getCount()
 
         const result = await new FilterQueryBuilder<T>(this.repository, filter)
             .build()
