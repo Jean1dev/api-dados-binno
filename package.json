@@ -9,7 +9,8 @@
     "dev:not:inspect": "NODE_ENV=dev ts-node-dev --transpileOnly --ignore-watch node_modules src/index.ts",
     "test": "NODE_ENV=test jest",
     "build": "tsc",
-    "migrate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run"
+    "migrate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
+    "prestart": "npm run migrate"
   },
   "repository": {
     "type": "git",
@@ -34,19 +35,23 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "graphql": "^15.0.0",
+    "graphql-fields": "^2.0.3",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.19",
     "pg": "^7.18.2",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1",
-    "ts-node-dev": "^1.0.0-pre.44",
     "tsyringe": "^4.3.0",
     "type-graphql": "^1.0.0-rc.1",
     "typeorm": "^0.2.24"
   },
   "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.44",
     "@types/bcryptjs": "^2.4.2",
     "@types/bluebird": "^3.5.30",
+    "@types/graphql-fields": "^1.3.3",
     "@types/jsonwebtoken": "^8.3.9",
+    "@types/lodash": "^4.14.158",
     "@types/validator": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",

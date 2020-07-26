@@ -37,8 +37,7 @@ export default class VeiculoRepository extends BasicRepository<Veiculo> implemen
 
     public async save(data: Veiculo): Promise<Veiculo> {
         const veiculo = Veiculo.create(data)
-        await veiculo.save()
-        return veiculo
+        return super.save(veiculo)
     }
 
     public async update(data: Veiculo): Promise<Veiculo> {

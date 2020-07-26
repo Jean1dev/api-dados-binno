@@ -17,17 +17,23 @@ export default class VeiculoResolver {
     }
 
     @FieldResolver()
-    public async pessoa_id(@Root() veiculo: Veiculo) {
+    public async pessoa(@Root() veiculo: Veiculo) {
         return Pessoa.findOne({where: {id: veiculo.pessoa_id}})
     }
 
     @Authorized()
     @Query(() => PaginatedVeiculo)
-    public async veiculos(
+    public async veiculosPaginated(
         @Arg("limit", {defaultValue: 10}) limit: number,
         @Arg("offset", {defaultValue: 0}) offset: number,
         @Arg("filters", {defaultValue: {}}) filters: FiltersExpression) {
         return this.repository.findAllAndCount(limit, offset, filters)
+    }
+
+    @Authorized()
+    @Query(returns => [Veiculo])
+    public async veiculos() {
+        return this.repository.findAll()
     }
 
     @Query(() => Veiculo)
