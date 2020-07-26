@@ -10,7 +10,7 @@
     "test": "NODE_ENV=test jest",
     "build": "tsc",
     "migrate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
-    "prestart": "npm run migrate"
+    "prestart": "npx typeorm migration:run"
   },
   "repository": {
     "type": "git",
