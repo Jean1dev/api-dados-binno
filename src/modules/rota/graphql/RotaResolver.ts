@@ -42,7 +42,7 @@ export default class RotaResolver {
 
     @Authorized()
     @Query(() => PaginatedRoute)
-    public async rotas(
+    public async rotasPaginated(
         @Arg("limit", { defaultValue: 10 }) limit: number,
         @Arg("offset", { defaultValue: 0 }) offset: number,
         @Arg("situacao", type => SituacaoRota, { defaultValue: SituacaoRota.TODOS }) situacao: SituacaoRota) {
@@ -51,6 +51,12 @@ export default class RotaResolver {
             where = { situacao_rota: situacao }
         }
         return this.repository.findAllAndCount(limit, offset, where)
+    }
+
+    @Authorized()
+    @Query(returns => [Rota])
+    public async rotas() {
+        return this.repository.findAll()
     }
 
     @Query(() => Rota)

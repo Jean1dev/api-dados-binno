@@ -28,11 +28,17 @@ export default class RoteirizacaoResolver {
 
     @Authorized()
     @Query(() => PaginatedRoteirizacao)
-    public async roteirizacoes(
+    public async roteirizacoesPaginated(
         @Arg("limit", {defaultValue: 10}) limit: number,
         @Arg("offset", {defaultValue: 0}) offset: number,
         @Arg("filters", {defaultValue: {}}) filters: FiltersExpression) {
         return this.repository.findAllAndCount(limit, offset, filters)
+    }
+
+    @Authorized()
+    @Query(returns => [Roteirizacao])
+    public async roteirizacoes() {
+        return this.repository.findAll()
     }
 
     @Authorized()

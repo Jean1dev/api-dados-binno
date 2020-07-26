@@ -10,6 +10,7 @@ import BuildSchema from './graphql/builtSchema'
 import { errorHandler } from './errors/CustomExpressErrorHandler'
 import * as Sentry from '@sentry/node'
 import cors from 'cors'
+import RequestedFields from "./graphql/shared/RequestedFields";
 require('appmetrics-dash').attach()
 
 class App {
@@ -18,9 +19,11 @@ class App {
     private express: express.Application
     private server: ApolloServer
     public httpServer: Server
+    private requestedFields: RequestedFields
 
     constructor() {
         this.express = express()
+        this.requestedFields = new RequestedFields()
     }
 
     public start(port: number = 8082): void {
@@ -52,7 +55,8 @@ class App {
         return (req: Request) => {
             const context = {
                 request: req,
-                user: 'req.user', // `req.user` comes from `express-jwt`
+                user: 'req.user', // `req.user` comes from `express-jwt`,
+                requestedFields: this.requestedFields
             };
 
             return context;

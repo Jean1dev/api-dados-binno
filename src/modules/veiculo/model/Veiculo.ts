@@ -1,4 +1,4 @@
-import { BaseEntity, PrimaryGeneratedColumn, Entity, Column } from "typeorm";
+import {BaseEntity, PrimaryGeneratedColumn, Entity, Column, OneToOne} from "typeorm";
 import { Field, ID, ObjectType, Int } from "type-graphql";
 import Pessoa from "../../pessoa/model/Pessoa";
 import Builder from "../../../shared/Builder";
@@ -43,8 +43,12 @@ export default class Veiculo extends BaseEntity {
     tipo_viagem: string
 
     @Column()
-    @Field(() => Pessoa)
+    @Field(() => Int)
     pessoa_id: number
+
+    @OneToOne(type => Pessoa)
+    @Field(returns => Pessoa)
+    pessoa: Pessoa
 
     @Column()
     veiculo_esta_sendo_utilizado_no_momento: boolean

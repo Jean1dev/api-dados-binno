@@ -18,6 +18,11 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
         return this.repository.findOne({where: filter})
     }
 
+    public async findAll(): Promise<T[]> {
+        const {matriz_id} = this.authenticationHolder.getAuthenticationData()
+        return this.repository.find({where: {matriz_id}})
+    }
+
     public async find(limit: number = 10, offset: number = 0, filter: any = {}): Promise<T[]> {
         const {matriz_id} = this.authenticationHolder.getAuthenticationData()
         if (!isNececessaryBuiltFilter(filter)) {
@@ -33,12 +38,18 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
             .getMany()
     }
 
-    public async findAllAndCount(limit: number = 10, offset: number = 0, filter: any = {}): Promise<IConsultaDadosComTotais<T>> {
+    public async findAllAndCount(limit: number = 10, offset: number = 0, filter: any = {}, selectedFields?: string[]): Promise<IConsultaDadosComTotais<T>> {
         const {matriz_id} = this.authenticationHolder.getAuthenticationData()
         if (!isNececessaryBuiltFilter(filter)) {
             filter.matriz_id = matriz_id
             const total = await this.getTotal(matriz_id)
-            const result = await this.repository.find({take: limit, skip: offset, where: filter})
+            // @ts-ignore
+            const result = await this.repository.find({
+                take: limit,
+                skip: offset,
+                where: filter,
+                select: selectedFields
+            })
 
             return {
                 items: result,
@@ -53,6 +64,7 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
 
         const result = await new FilterQueryBuilder<T>(this.repository, filter)
             .build()
+            //.select(selectedFields)
             .andWhere(`matriz_id = ${matriz_id}`)
             .limit(limit)
             .offset(offset)
