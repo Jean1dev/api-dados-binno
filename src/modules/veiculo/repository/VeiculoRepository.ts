@@ -24,14 +24,16 @@ export default class VeiculoRepository extends BasicRepository<Veiculo> implemen
     }
 
     public async getTotalVeiculosRodados(): Promise<number> {
+        const {matriz_id} = this.authenticationHolder.getAuthenticationData();
         return this.repository.count({
-            where: { veiculo_esta_sendo_utilizado_no_momento: true }
+            where: { veiculo_esta_sendo_utilizado_no_momento: true, matriz_id }
         })
     }
 
     public async getTotalVeiculosParados(): Promise<number> {
+        const {matriz_id} = this.authenticationHolder.getAuthenticationData();
         return this.repository.count({
-            where: { veiculo_esta_sendo_utilizado_no_momento: false }
+            where: { veiculo_esta_sendo_utilizado_no_momento: false, matriz_id }
         })
     }
 
@@ -47,12 +49,13 @@ export default class VeiculoRepository extends BasicRepository<Veiculo> implemen
             throw new DefaultAppError('Veiculo nao existe')
         }
 
-        Object.assign(veiculo, data)
+        Object.assign(veiculo, data)// Object assing transforma o id em String ai buga o save
+        veiculo.id = Number(veiculo.id)
         await veiculo.save()
         return veiculo
     }
 
     public async delete(id: number): Promise<boolean> {
-        return !!this.repository.delete({ id })
+        return !!await this.repository.delete({id})
     }
 }

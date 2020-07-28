@@ -25,7 +25,8 @@ export default class PessoaRepository extends BasicRepository<Pessoa> implements
             throw new DefaultAppError('Usuario nao existe')
         }
 
-        Object.assign(pessoa, data)
+        Object.assign(pessoa, data) // Object assing transforma o id em String ai buga o save
+        pessoa.id = Number(pessoa.id)
         await pessoa.save()
         return pessoa
     }

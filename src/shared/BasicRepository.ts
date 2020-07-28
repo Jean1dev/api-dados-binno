@@ -7,7 +7,7 @@ import {IConsultaDadosComTotais} from "./interfaces/IConsultaDadosComTotais";
 
 export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
     public repository: Repository<T>
-    private authenticationHolder: AuthenticationHolder
+    protected authenticationHolder: AuthenticationHolder
 
     constructor(repository: Repository<T>) {
         this.repository = repository
@@ -38,17 +38,20 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
             .getMany()
     }
 
-    public async findAllAndCount(limit: number = 10, offset: number = 0, filter: any = {}, selectedFields?: string[]): Promise<IConsultaDadosComTotais<T>> {
+    public async findAllAndCount(limit: number = 10, offset: number = 0, filter: any = {}, selection?: string[]): Promise<IConsultaDadosComTotais<T>> {
         const {matriz_id} = this.authenticationHolder.getAuthenticationData()
         if (!isNececessaryBuiltFilter(filter)) {
             filter.matriz_id = matriz_id
             const total = await this.getTotal(matriz_id)
-            // @ts-ignore
             const result = await this.repository.find({
+                // @ts-ignore
                 take: limit,
                 skip: offset,
                 where: filter,
-                select: selectedFields
+                select: selection,
+                order: {
+                    'id': "ASC"
+                }
             })
 
             return {
@@ -64,10 +67,10 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
 
         const result = await new FilterQueryBuilder<T>(this.repository, filter)
             .build()
-            //.select(selectedFields)
             .andWhere(`matriz_id = ${matriz_id}`)
             .limit(limit)
             .offset(offset)
+            .orderBy('id', "ASC")
             .getMany()
 
         return {
