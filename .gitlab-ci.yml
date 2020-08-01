@@ -3,7 +3,6 @@ image: node:latest
 stages:
   - install
   - build
-  - db_migrate
   - deploy_prod
 
 cache:
@@ -22,27 +21,12 @@ install_dependencies:
 
 compile_typescript:
   stage: build
-  only:
-    - master
   script:
     - npm run build
   artifacts:
     paths:
       - dist/
     expire_in: 1 week
-
-configure_databse:
-  stage: db_migrate
-  only:
-    - master
-  script:
-    - export HOST_DB=$HOST_DB
-    - export USERNAME_DB=$USERNAME_DB
-    - export PASSWD_DB=$PASSWD_DB
-    - export DB_NAME=$DB_NAME
-    - export SSL_CONNECTION=true
-    - export NODE_ENV=prod
-    - npm run migrate
 
 test_environment:
   stage: deploy_prod

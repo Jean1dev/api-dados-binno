@@ -4,6 +4,7 @@ import Pessoa from "../../pessoa/model/Pessoa";
 import Builder from "../../../shared/Builder";
 import Geocoding from "../graphql/types/Geocoding";
 import {IGeocoding} from "./Geocoding.model";
+import SituacaoProcessamento from "../SituacaoProcessamento.enum";
 
 @Entity('roteirizacao')
 @ObjectType()
@@ -29,6 +30,10 @@ export default class Roteirizacao extends BaseEntity {
     @Field(() => Number)
     sequencial?: number
 
+    @Column('int')
+    @Field(returns => SituacaoProcessamento)
+    situacao: SituacaoProcessamento
+
     @Column()
     @Field(() => String)
     descricao?: string
@@ -40,6 +45,11 @@ export default class Roteirizacao extends BaseEntity {
 
         constructor() {
             super(new Roteirizacao());
+        }
+
+        situacao(situacao: SituacaoProcessamento): this {
+            this.entity.situacao = situacao
+            return this
         }
 
         geocoding(geocoding: IGeocoding): this {

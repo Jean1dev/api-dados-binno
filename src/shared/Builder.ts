@@ -25,6 +25,8 @@ export default class Builder<T> implements IBuilder<T> {
 
     beforeBuild(): void {}
 
-    buildFrom(data: T): T { return data }
-
+    buildFrom(data: T): this {
+        this.entity = data
+        return this
+    }
 }
