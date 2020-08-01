@@ -68,10 +68,6 @@ export default class Rota extends BaseEntity {
     static Builder = class RotaBuilder extends Builder<Rota> {
         constructor() { super(new Rota()) }
 
-        buildFrom(data: Rota): Rota {
-            return Rota.create(data)
-        }
-
         matriz_id(matriz_id: number): this {
             this.entity.matriz_id = matriz_id
             return this

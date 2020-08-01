@@ -1,5 +1,4 @@
 import {container, singleton} from "tsyringe";
-import GeolocalizacaoClient from "../../../shared/RestClient/GeolocalizacaoClient";
 import Roteirizacao from "../model/Roteirizacao";
 import AuthenticationHolder from "../../../context/AuthenticationHolder";
 import DefaultAppError from "../../../errors/DefaultAppError";
@@ -7,6 +6,9 @@ import SituacaoRota from "../../rota/SituacaoRota.enum";
 import Rota from "../../rota/model/Rota";
 import RotaRepository from "../../rota/repository/RotaRepository";
 import RoteirizacaoRepository from "../repository/RoteirizacaoRepository";
+import TaskClient from "../../../shared/RestClient/TaskClient";
+import {IGeocoding} from "../model/Geocoding.model";
+import SituacaoProcessamento from "../SituacaoProcessamento.enum";
 
 interface IWaypoint {
     longitude: number
@@ -33,32 +35,53 @@ interface IRotaAndRascunho {
 @singleton()
 export default class RoteirizacaoService {
 
-    private geolocalizacaoClient: GeolocalizacaoClient
+    private tasksClient: TaskClient
     private authenticationHolder: AuthenticationHolder
     private rotaRepository: RotaRepository
     private repository: RoteirizacaoRepository
 
     constructor() {
-        this.geolocalizacaoClient = container.resolve(GeolocalizacaoClient)
+        this.tasksClient = container.resolve(TaskClient)
         this.authenticationHolder = container.resolve(AuthenticationHolder)
         this.rotaRepository = container.resolve(RotaRepository)
         this.repository = container.resolve(RoteirizacaoRepository)
     }
 
+    public async finalizarProcessamento(data: IGeocoding, roteirizacaoId: number): Promise<void> {
+        let rota = await this.repository.findOne({ id: roteirizacaoId })
+
+        if (rota instanceof Roteirizacao) {
+            rota = new Roteirizacao.Builder()
+                .buildFrom(rota)
+                .geocoding(data)
+                .situacao(SituacaoProcessamento.CONCLUIDO)
+                .build()
+
+            await rota.save()
+        }
+    }
+
     public async roteirizar(payload: IPayload): Promise<Roteirizacao> {
         try {
-            const {data} = await this.geolocalizacaoClient.roteirizar(payload)
             const {userAccess, matriz_id} = this.authenticationHolder.getAuthenticationData()
-
             if (!userAccess || !matriz_id) {
                 throw new DefaultAppError('userAccess ou matriz_id nao fornecidos')
             }
 
-            return this.repository.save(new Roteirizacao.Builder()
+            const rota = await this.repository.save(new Roteirizacao.Builder()
                 .matriz_id(matriz_id)
                 .pessoa_id(userAccess)
-                .geocoding(data)
+                .geocoding({} as IGeocoding)
                 .build())
+
+            await this.tasksClient.creatTaskRoteirizar({
+                roteirizacaoId: rota.id,
+                matrizId: matriz_id,
+                userId: userAccess,
+                payload
+            })
+
+            return rota
         } catch (e) {
             throw new DefaultAppError('Ocorreu um erro ao criar o rascunho', 400, e)
         }

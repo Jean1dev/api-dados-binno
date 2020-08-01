@@ -12,5 +12,5 @@ export default interface IBuilder<T> {
 
     beforeBuild(): void
 
-    buildFrom(data: T): T
+    buildFrom(data: T): IBuilder<T>
 }
