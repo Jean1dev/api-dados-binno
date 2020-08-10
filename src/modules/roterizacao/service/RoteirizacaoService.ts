@@ -9,6 +9,8 @@ import RoteirizacaoRepository from "../repository/RoteirizacaoRepository";
 import TaskClient from "../../../shared/RestClient/TaskClient";
 import {IGeocoding} from "../model/Geocoding.model";
 import SituacaoProcessamento from "../SituacaoProcessamento.enum";
+import UsuarioAcesso from "../../usuarioacesso/model/UsuarioAcesso";
+import Pessoa from "../../pessoa/model/Pessoa";
 
 interface IWaypoint {
     longitude: number
@@ -68,9 +70,13 @@ export default class RoteirizacaoService {
                 throw new DefaultAppError('userAccess ou matriz_id nao fornecidos')
             }
 
+            const user = await UsuarioAcesso.findOne({ where: { id: userAccess }})
+            const pessoa = await Pessoa.findOne({ where: { id: user?.pessoa }})
+
             const rota = await this.repository.save(new Roteirizacao.Builder()
                 .matriz_id(matriz_id)
-                .pessoa_id(userAccess)
+                //@ts-ignore
+                .pessoa_id(pessoa.id)
                 .geocoding({} as IGeocoding)
                 .build())
 
