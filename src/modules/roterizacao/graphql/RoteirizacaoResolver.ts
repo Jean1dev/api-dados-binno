@@ -7,7 +7,6 @@ import Pessoa from "../../pessoa/model/Pessoa";
 import RotaUnionRotaRascunho from "./types/rotaUnionRotaRascunho";
 import SituacaoRota from "../../rota/SituacaoRota.enum";
 import RoteirizacaoService from "../service/RoteirizacaoService";
-import GeocodingInput from "./inputs/GeocodingInput";
 import PaginatedRoteirizacao from "./types/PaginatedRoteirizacao";
 
 @Resolver(Roteirizacao)
@@ -57,9 +56,11 @@ export default class RoteirizacaoResolver {
     public async criarRota(
         @Arg("roteirizacaoId") roteirizacaoId: number,
         @Arg("motoristaId", {defaultValue: null}) motoristaId: number,
-        @Arg("geojson") geojson: GeocodingInput,
+        @Arg("geojson") geojson: String,
         @Arg("situacao", type => SituacaoRota, {defaultValue: SituacaoRota.PLANEJADA}) situacao: SituacaoRota
     ) {
+        //@ts-ignore
+        geojson = JSON.parse(geojson)
         const {roteirizacao, rota} = await this.service.criarRota({
             geojson,
             situacao,
