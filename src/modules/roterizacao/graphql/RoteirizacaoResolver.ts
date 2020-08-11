@@ -36,6 +36,12 @@ export default class RoteirizacaoResolver {
     }
 
     @Authorized()
+    @Query(returns => Roteirizacao)
+    public async getById(@Arg("id") id: number) {
+        return this.repository.findOne({ id: id })
+    }
+
+    @Authorized()
     @Query(returns => [Roteirizacao])
     public async roteirizacoes() {
         return this.repository.findAll()

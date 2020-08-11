@@ -31,7 +31,6 @@ compile_typescript:
 test_environment:
   stage: deploy_prod
   image: ruby:latest
-  when: manual
   only:
     - master
   script:
