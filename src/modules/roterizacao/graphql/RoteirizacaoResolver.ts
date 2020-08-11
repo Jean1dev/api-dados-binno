@@ -26,6 +26,11 @@ export default class RoteirizacaoResolver {
         return Pessoa.findOne({where: {id: rota.pessoa_id}})
     }
 
+    @FieldResolver()
+    public geocodingString(@Root() rota: Roteirizacao) {
+        return JSON.stringify(rota.geocoding)
+    }
+
     @Authorized()
     @Query(() => PaginatedRoteirizacao)
     public async roteirizacoesPaginated(
@@ -37,7 +42,7 @@ export default class RoteirizacaoResolver {
 
     @Authorized()
     @Query(returns => Roteirizacao)
-    public async getById(@Arg("id") id: number) {
+    public async roteirizacao(@Arg("id") id: number) {
         return this.repository.findOne({ id: id })
     }
 

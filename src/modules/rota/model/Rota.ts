@@ -38,6 +38,9 @@ export default class Rota extends BaseEntity {
     @Field(() => Geocoding)
     geocoding: IGeocoding
 
+    @Field(() => String)
+    geocodingString?: string
+
     @Column()
     @Field(() => Boolean)
     confimada: boolean

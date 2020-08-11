@@ -18,6 +18,9 @@ export default class Roteirizacao extends BaseEntity {
     @Field(() => Geocoding)
     geocoding: IGeocoding
 
+    @Field(() => String)
+    geocodingString?: string
+
     @Column()
     @Field(() => Boolean)
     teveAlgumaRotaCriada?: boolean

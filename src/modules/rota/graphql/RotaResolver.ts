@@ -40,6 +40,11 @@ export default class RotaResolver {
         return Pessoa.findOne({ where: { id: rota.enviado_para } })
     }
 
+    @FieldResolver()
+    public geocodingString(@Root() rota: Rota) {
+        return JSON.stringify(rota.geocoding)
+    }
+
     @Authorized()
     @Query(() => PaginatedRoute)
     public async rotasPaginated(
