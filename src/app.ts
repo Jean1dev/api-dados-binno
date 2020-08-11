@@ -16,10 +16,10 @@ require('appmetrics-dash').attach()
 class App {
 
     private port: number = 8082
-    private express: express.Application
+    private readonly express: express.Application
     private server: ApolloServer
     public httpServer: Server
-    private requestedFields: RequestedFields
+    private readonly requestedFields: RequestedFields
 
     constructor() {
         this.express = express()
