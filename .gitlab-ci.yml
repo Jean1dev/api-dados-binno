@@ -37,4 +37,4 @@ test_environment:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=api-dados-binno --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=api-dados --api-key=$HEROKU_JEANLUCAFP

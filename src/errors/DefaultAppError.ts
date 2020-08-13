@@ -7,9 +7,5 @@ export default class DefaultAppError {
     constructor(message: string, statusCode = 400, error?: Error) {
         this.message = message
         this.statusCode = statusCode
-
-        if (error) {
-            console.error(message, error.message)
-        }
     }
 }
