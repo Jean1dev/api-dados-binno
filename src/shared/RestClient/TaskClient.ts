@@ -16,4 +16,10 @@ export default class TaskClient {
     public async creatTaskRoteirizar(payload: ICriarRascunhoPayload): Promise<AxiosResponse> {
         return axios.post(`${this.BASE_URL}/task`, payload)
     }
+
+    public async removeS3File(fileS3Key: string): Promise<AxiosResponse> {
+        return axios.post(`${this.BASE_URL}/remove-s3-file`, {
+            key: fileS3Key
+        })
+    }
 }

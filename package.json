@@ -9,7 +9,7 @@
     "dev:not:inspect": "NODE_ENV=dev ts-node-dev --transpileOnly --ignore-watch node_modules src/index.ts",
     "test": "NODE_ENV=test jest",
     "build": "tsc",
-    "migrate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
+    "migrate": "npm run build && ./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
     "prestart": "npx typeorm migration:run"
   },
   "repository": {
@@ -25,7 +25,6 @@
   "dependencies": {
     "@sentry/node": "^5.16.1",
     "apollo-server-express": "^2.13.1",
-    "appmetrics-dash": "^5.3.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.2.3",

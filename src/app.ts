@@ -11,7 +11,7 @@ import { errorHandler } from './errors/CustomExpressErrorHandler'
 import * as Sentry from '@sentry/node'
 import cors from 'cors'
 import RequestedFields from "./graphql/shared/RequestedFields";
-require('appmetrics-dash').attach()
+// require('appmetrics-dash').attach() // HEROKU JA FORNECE AS METRICAS
 
 class App {
 

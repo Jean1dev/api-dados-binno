@@ -86,7 +86,8 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
     }
 
     delete(id: number): Promise<boolean> {
-        throw new Error('metodo nao sobrescrito')
+        //@ts-ignore
+        return this.repository.delete(id)
     }
 
     update(data: T): Promise<T> {

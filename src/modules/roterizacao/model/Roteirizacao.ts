@@ -21,6 +21,10 @@ export default class Roteirizacao extends BaseEntity {
     @Field(() => String)
     geocodingString?: string
 
+    @Field(() => String)
+    @Column()
+    geocodingURI?: string
+
     @Column()
     @Field(() => Boolean)
     teveAlgumaRotaCriada?: boolean
@@ -77,6 +81,11 @@ export default class Roteirizacao extends BaseEntity {
 
         matriz_id(matriz_id: number): this {
             this.entity.matriz_id = matriz_id
+            return this
+        }
+
+        geocodingURI(geocodingURI: string): this {
+            this.entity.geocodingURI = geocodingURI
             return this
         }
     }

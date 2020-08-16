@@ -49,13 +49,27 @@ export default class RoteirizacaoService {
         this.repository = container.resolve(RoteirizacaoRepository)
     }
 
-    public async finalizarProcessamento(data: IGeocoding, roteirizacaoId: number): Promise<void> {
+    public async removerRoteirizacao(roteirizacaoId: number): Promise<boolean> {
+        let rota = await this.repository.findOne({ id: roteirizacaoId })
+        if (rota instanceof Roteirizacao) {
+            const s3uri = rota.geocodingURI?.split('/')
+            if (s3uri) {
+                const s3key = s3uri[s3uri.length - 1]
+                await this.tasksClient.removeS3File(s3key)
+            }
+            await this.repository.delete(roteirizacaoId)
+            return true
+        }
+        return false
+    }
+
+    public async finalizarProcessamento(roteirizacaoId: number, uri: string): Promise<void> {
         let rota = await this.repository.findOne({ id: roteirizacaoId })
 
         if (rota instanceof Roteirizacao) {
             rota = new Roteirizacao.Builder()
                 .buildFrom(rota)
-                .geocoding(data)
+                .geocodingURI(uri)
                 .situacao(SituacaoProcessamento.CONCLUIDO)
                 .build()
 
@@ -77,7 +91,6 @@ export default class RoteirizacaoService {
                 .matriz_id(matriz_id)
                 //@ts-ignore
                 .pessoa_id(pessoa.id)
-                .geocoding({} as IGeocoding)
                 .build())
 
             await this.tasksClient.creatTaskRoteirizar({

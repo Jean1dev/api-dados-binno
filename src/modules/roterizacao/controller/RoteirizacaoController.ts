@@ -17,7 +17,7 @@ interface IPayload {
 
 interface IFinalizarProcessamentoPayload {
     roteirizacaoId: number,
-    data: IGeocoding
+    uri: string
 }
 
 @Controller('/roteirizacao')
@@ -38,6 +38,6 @@ export default class RoteirizacaoController {
     @Post('/processamento')
     @OnUndefined(204)
     public async finalizarProcessamento(@Body() payload: IFinalizarProcessamentoPayload) {
-        await this.service.finalizarProcessamento(payload.data, payload.roteirizacaoId)
+        await this.service.finalizarProcessamento(payload.roteirizacaoId, payload.uri)
     }
 }
