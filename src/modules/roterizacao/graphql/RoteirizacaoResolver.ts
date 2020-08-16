@@ -70,4 +70,10 @@ export default class RoteirizacaoResolver {
 
         return {roteirizacao, rota}
     }
+
+    @Authorized()
+    @Mutation(() => Boolean)
+    public async deleteRoteirizacao(@Arg("id") roteirizacaoId: number) {
+        return this.service.removerRoteirizacao(roteirizacaoId)
+    }
 }
