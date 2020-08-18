@@ -1,5 +1,6 @@
-import { Controller, Post, OnUndefined, Body } from "routing-controllers";
+import { Controller, Post, Body } from "routing-controllers";
 import IntegracaoUsuarioService from "./IntegracaoUsuarioService";
+import UsuarioAcesso from "../../usuarioacesso/model/UsuarioAcesso";
 
 interface UsuarioIntegracaoPayload {
     nome: string
@@ -18,16 +19,15 @@ export class IntegracaoUsuarioController {
     }
 
     @Post('/integracao/usuario-acesso')
-    @OnUndefined(204)
     public async integrar(@Body() {
         nome,
         login,
         senha,
         email,
         identificadorSistemaOrigem
-    }: UsuarioIntegracaoPayload): Promise<void> {
+    }: UsuarioIntegracaoPayload): Promise<UsuarioAcesso> {
         
-        await this.service.integrar({
+        return this.service.integrar({
             nome,
             login,
             senha,
