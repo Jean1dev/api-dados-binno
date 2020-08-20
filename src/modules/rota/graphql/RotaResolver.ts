@@ -41,8 +41,8 @@ export default class RotaResolver {
     }
 
     @FieldResolver()
-    public geocodingString(@Root() rota: Rota) {
-        return JSON.stringify(rota.geocoding)
+    public geocodingURI(@Root() rota: Rota) {
+        return rota.geocoding
     }
 
     @Authorized()

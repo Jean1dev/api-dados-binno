@@ -1,4 +1,4 @@
-import {container, singleton} from "tsyringe";
+import { container, singleton } from "tsyringe";
 import Roteirizacao from "../model/Roteirizacao";
 import AuthenticationHolder from "../../../context/AuthenticationHolder";
 import DefaultAppError from "../../../errors/DefaultAppError";
@@ -7,10 +7,11 @@ import Rota from "../../rota/model/Rota";
 import RotaRepository from "../../rota/repository/RotaRepository";
 import RoteirizacaoRepository from "../repository/RoteirizacaoRepository";
 import TaskClient from "../../../shared/RestClient/TaskClient";
-import {IGeocoding} from "../model/Geocoding.model";
+import { IGeocoding } from "../model/Geocoding.model";
 import SituacaoProcessamento from "../SituacaoProcessamento.enum";
 import UsuarioAcesso from "../../usuarioacesso/model/UsuarioAcesso";
 import Pessoa from "../../pessoa/model/Pessoa";
+import Utils from "../../../shared/utils/Utils";
 
 interface IWaypoint {
     longitude: number
@@ -63,6 +64,18 @@ export default class RoteirizacaoService {
         return false
     }
 
+    public async falhaNoProcessamento(roteirizacaoId: number): Promise<void> {
+        let rota = await this.repository.findOne({ id: roteirizacaoId })
+        if (rota instanceof Roteirizacao) {
+            rota = new Roteirizacao.Builder()
+                .buildFrom(rota)
+                .situacao(SituacaoProcessamento.COM_FALHA)
+                .build()
+
+            await rota.save()
+        }
+    }
+
     public async finalizarProcessamento(roteirizacaoId: number, uri: string): Promise<void> {
         let rota = await this.repository.findOne({ id: roteirizacaoId })
 
@@ -79,18 +92,19 @@ export default class RoteirizacaoService {
 
     public async roteirizar(payload: IPayload): Promise<Roteirizacao> {
         try {
-            const {userAccess, matriz_id} = this.authenticationHolder.getAuthenticationData()
+            const { userAccess, matriz_id } = this.authenticationHolder.getAuthenticationData()
             if (!userAccess || !matriz_id) {
                 throw new DefaultAppError('userAccess ou matriz_id nao fornecidos')
             }
 
-            const user = await UsuarioAcesso.findOne({ where: { id: userAccess }})
-            const pessoa = await Pessoa.findOne({ where: { id: user?.pessoa }})
+            const user = await UsuarioAcesso.findOne({ where: { id: userAccess } })
+            const pessoa = await Pessoa.findOne({ where: { id: user?.pessoa } })
 
             const rota = await this.repository.save(new Roteirizacao.Builder()
                 .matriz_id(matriz_id)
                 //@ts-ignore
                 .pessoa_id(pessoa.id)
+                .cor(Utils.geraCor())
                 .build())
 
             await this.tasksClient.creatTaskRoteirizar({
@@ -108,7 +122,7 @@ export default class RoteirizacaoService {
 
     public async criarRota(payload: IDadosRota): Promise<IRotaAndRascunho> {
         try {
-            const roteirizacao = await this.repository.findOne({where: {id: payload.roteirizacaoId}})
+            const roteirizacao = await this.repository.findOne({ where: { id: payload.roteirizacaoId } })
 
             if (!roteirizacao) {
                 throw new DefaultAppError('Roteirizacao inexistente')
@@ -120,6 +134,7 @@ export default class RoteirizacaoService {
                 .situacao_rota(payload.situacao)
                 .geocoding(payload.geojson)
                 .nome(roteirizacao.descricao || '')
+                .cor(roteirizacao.cor || Utils.geraCor())
                 .build())
 
             return {

@@ -1,10 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
-import { ObjectType, Field, ID, Float } from "type-graphql";
+import { ObjectType, Field, Float } from "type-graphql";
 import Pessoa from "../../pessoa/model/Pessoa";
 import SituacaoRota from "../SituacaoRota.enum";
 import Builder from "../../../shared/Builder";
-import Geocoding from "../../roterizacao/graphql/types/Geocoding";
-import {IGeocoding} from "../../roterizacao/model/Geocoding.model";
 
 @Entity('rota')
 @ObjectType()
@@ -26,6 +24,10 @@ export default class Rota extends BaseEntity {
     @Field(() => Float)
     kilometragem: number
 
+    @Field(() => String)
+    @Column()
+    cor?: string
+
     @Column()
     @Field(() => String)
     tempoEstimado: string
@@ -34,12 +36,11 @@ export default class Rota extends BaseEntity {
     @Field(() => String)
     localDePartida: string
 
-    @Column({ type: 'json'})
-    @Field(() => Geocoding)
-    geocoding: IGeocoding
+    @Column()
+    geocoding: String
 
     @Field(() => String)
-    geocodingString?: string
+    geocodingURI?: string
 
     @Column()
     @Field(() => Boolean)
@@ -101,7 +102,7 @@ export default class Rota extends BaseEntity {
             return this
         }
 
-        geocoding(geocoding: IGeocoding): this {
+        geocoding(geocoding: String): this {
             this.entity.geocoding = geocoding
             return this
         }
@@ -133,6 +134,11 @@ export default class Rota extends BaseEntity {
 
         situacao_rota(situacao_rota: SituacaoRota): this {
             this.entity.situacao_rota = situacao_rota
+            return this
+        }
+
+        cor(cor: string): this {
+            this.entity.cor = cor
             return this
         }
     }

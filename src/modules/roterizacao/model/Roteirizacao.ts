@@ -2,8 +2,6 @@ import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 import {Field, ObjectType} from "type-graphql";
 import Pessoa from "../../pessoa/model/Pessoa";
 import Builder from "../../../shared/Builder";
-import Geocoding from "../graphql/types/Geocoding";
-import {IGeocoding} from "./Geocoding.model";
 import SituacaoProcessamento from "../SituacaoProcessamento.enum";
 
 @Entity('roteirizacao')
@@ -14,16 +12,13 @@ export default class Roteirizacao extends BaseEntity {
     @Field(() => Number)
     id: number
 
-    @Column({ type: 'json'})
-    @Field(() => Geocoding)
-    geocoding: IGeocoding
-
-    @Field(() => String)
-    geocodingString?: string
-
     @Field(() => String)
     @Column()
     geocodingURI?: string
+
+    @Field(() => String)
+    @Column()
+    cor?: string
 
     @Column()
     @Field(() => Boolean)
@@ -59,11 +54,6 @@ export default class Roteirizacao extends BaseEntity {
             return this
         }
 
-        geocoding(geocoding: IGeocoding): this {
-            this.entity.geocoding = geocoding
-            return this
-        }
-
         teveAlgumaRotaCriada(teveAlgumaRotaCriada: boolean): this {
             this.entity.teveAlgumaRotaCriada = teveAlgumaRotaCriada
             return this
@@ -86,6 +76,11 @@ export default class Roteirizacao extends BaseEntity {
 
         geocodingURI(geocodingURI: string): this {
             this.entity.geocodingURI = geocodingURI
+            return this
+        }
+
+        cor(cor: string): this {
+            this.entity.cor = cor
             return this
         }
     }

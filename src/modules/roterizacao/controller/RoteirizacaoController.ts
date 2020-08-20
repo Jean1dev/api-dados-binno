@@ -3,7 +3,6 @@ import Roteirizacao from "../model/Roteirizacao";
 import RoteirizacaoService from "../service/RoteirizacaoService";
 import {container} from "tsyringe";
 import expressAuthCheck from "../../../middlewares/expressAuthCheck";
-import {IGeocoding} from "../model/Geocoding.model";
 
 interface IWaypoint {
     longitude: number
@@ -39,5 +38,11 @@ export default class RoteirizacaoController {
     @OnUndefined(204)
     public async finalizarProcessamento(@Body() payload: IFinalizarProcessamentoPayload) {
         await this.service.finalizarProcessamento(payload.roteirizacaoId, payload.uri)
+    }
+
+    @Post('/falha')
+    @OnUndefined(204)
+    public async falhaNoProcessamento(@Body() payload: IFinalizarProcessamentoPayload) {
+        await this.service.falhaNoProcessamento(payload.roteirizacaoId)
     }
 }
