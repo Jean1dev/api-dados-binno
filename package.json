@@ -9,7 +9,7 @@
     "dev:not:inspect": "NODE_ENV=dev ts-node-dev --transpileOnly --ignore-watch node_modules src/index.ts",
     "test": "NODE_ENV=test jest",
     "build": "tsc",
-    "migrate": "npm run build && ./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
+    "migrate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
     "prestart": "npx typeorm migration:run"
   },
   "repository": {
