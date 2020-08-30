@@ -1,12 +1,13 @@
-import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 import {Field, ObjectType} from "type-graphql";
 import Pessoa from "../../pessoa/model/Pessoa";
 import Builder from "../../../shared/Builder";
 import SituacaoProcessamento from "../SituacaoProcessamento.enum";
+import Entidade from "../../../shared/Entidade";
 
 @Entity('roteirizacao')
 @ObjectType()
-export default class Roteirizacao extends BaseEntity {
+export default class Roteirizacao extends Entidade {
 
     @PrimaryGeneratedColumn('increment')
     @Field(() => Number)
@@ -39,9 +40,6 @@ export default class Roteirizacao extends BaseEntity {
     @Column()
     @Field(() => String)
     descricao?: string
-
-    @Column()
-    matriz_id?: number
 
     static Builder = class RoteirizacaoBuilder extends Builder<Roteirizacao> {
 

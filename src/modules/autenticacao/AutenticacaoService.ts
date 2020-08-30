@@ -31,6 +31,10 @@ export default class AutenticacaoService {
             throw new DefaultAppError('Usuario nao existe', 401)
         }
 
+        if (!user.ativo) {
+            throw new DefaultAppError('Usuario esta inativo', 403)
+        }
+
         const passwordMatch = await compare(password, user.password)
         if (!passwordMatch) {
             throw new DefaultAppError('Credenciais incorretas', 401)

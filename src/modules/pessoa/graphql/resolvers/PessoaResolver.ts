@@ -63,10 +63,4 @@ export default class PessoaResolver {
     public async updatePessoa(@Arg("data") data: PessoaUpdateInput) {
         return this.repository.update(data as Pessoa)
     }
-
-    @Authorized()
-    @Mutation(() => Boolean)
-    public async criarUsuarioAcesso(@Arg("id") pessoaId: number) {
-        return this.service.criarUsuarioAcesso(pessoaId)
-    }
 }

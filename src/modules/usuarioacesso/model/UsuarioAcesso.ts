@@ -1,19 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
-import Builder from "../../../shared/Builder";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm"
+import Builder from "../../../shared/Builder"
+import { ObjectType, Field, ID } from "type-graphql"
+import Pessoa from "../../pessoa/model/Pessoa"
 
 @Entity('usuario_acesso')
+@ObjectType()
 export default class UsuarioAcesso extends BaseEntity {
 
+    @Field(() => ID)
     @PrimaryGeneratedColumn('increment')
     id: number
 
     @Column()
+    @Field(() => String)
     login: string
 
     @Column()
     password: string
 
     @Column()
+    @Field(() => Pessoa)
     pessoa: number
 
     @Column()
@@ -21,6 +27,10 @@ export default class UsuarioAcesso extends BaseEntity {
 
     @Column()
     identificador_sistema_origem: string
+
+    @Column()
+    @Field(() => Boolean)
+    ativo: boolean
 
     static Builder = class UsuarioAcessoBuilder extends Builder<UsuarioAcesso> {
         constructor() { super(new UsuarioAcesso()) }
@@ -47,6 +57,11 @@ export default class UsuarioAcesso extends BaseEntity {
 
         identificadorSistemaOrigem(identificador_sistema_origem: string): this {
             this.entity.identificador_sistema_origem = identificador_sistema_origem
+            return this
+        }
+
+        ativo(ativo: boolean): this {
+            this.entity.ativo = ativo
             return this
         }
     }

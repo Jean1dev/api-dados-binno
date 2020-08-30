@@ -34,6 +34,9 @@ export default class Matriz extends BaseEntity {
     @Field(() => String)
     identificador_sistema_origem: string
 
+    @Column()
+    public ativo: boolean
+
     static Builder = class MatrizBuilder extends Builder<Matriz> {
         constructor() { super(new Matriz()) }
 
@@ -64,6 +67,11 @@ export default class Matriz extends BaseEntity {
 
         identificadorSistemaOrigem(identificador_sistema_origem: string): this {
             this.entity.identificador_sistema_origem = identificador_sistema_origem
+            return this
+        }
+
+        ativo(ativo: boolean): this {
+            this.entity.ativo = ativo
             return this
         }
     }

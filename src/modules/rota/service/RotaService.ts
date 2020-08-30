@@ -1,5 +1,4 @@
 import {singleton, container} from "tsyringe";
-import GeolocalizacaoClient from "../../../shared/RestClient/GeolocalizacaoClient";
 import RotaRepository from "../repository/RotaRepository";
 import DefaultAppError from "../../../errors/DefaultAppError";
 import Rota from "../model/Rota";
@@ -8,12 +7,10 @@ import VeiculoRepository from "../../veiculo/repository/VeiculoRepository";
 @singleton()
 export default class RotaService {
 
-    private geolocalizacaoClient: GeolocalizacaoClient
     private repository: RotaRepository
     private veiculoRepository: VeiculoRepository
 
     constructor() {
-        this.geolocalizacaoClient = container.resolve(GeolocalizacaoClient)
         this.repository = container.resolve(RotaRepository)
         this.veiculoRepository = container.resolve(VeiculoRepository)
     }

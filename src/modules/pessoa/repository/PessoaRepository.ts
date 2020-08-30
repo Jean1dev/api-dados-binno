@@ -30,9 +30,4 @@ export default class PessoaRepository extends BasicRepository<Pessoa> implements
         await pessoa.save()
         return pessoa
     }
-
-    delete(id: number): Promise<boolean> {
-        throw new Error("Pessoa nao pode ser deletada.");
-    }
-
 }
