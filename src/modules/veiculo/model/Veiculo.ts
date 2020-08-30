@@ -1,15 +1,17 @@
-import {BaseEntity, PrimaryGeneratedColumn, Entity, Column, OneToOne} from "typeorm";
-import { Field, ID, ObjectType, Int } from "type-graphql";
+import {Entity, Column, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import { Field, ObjectType, Int, ID } from "type-graphql";
 import Pessoa from "../../pessoa/model/Pessoa";
 import Builder from "../../../shared/Builder";
+import Entidade from "../../../shared/Entidade";
 
 @Entity('veiculo')
 @ObjectType()
-export default class Veiculo extends BaseEntity {
-    @PrimaryGeneratedColumn('increment')
-    @Field(() => ID)
-    id: number
+export default class Veiculo extends Entidade {
 
+    @Field(() => ID)
+    @PrimaryGeneratedColumn('increment')
+    id: number
+    
     @Column()
     @Field(() => String)
     placa: string
@@ -43,6 +45,10 @@ export default class Veiculo extends BaseEntity {
     tipo_viagem: string
 
     @Column()
+    @Field(() => Number)
+    kilometragem_atual: number
+
+    @Column()
     @Field(() => Int)
     pessoa_id: number
 
@@ -52,9 +58,6 @@ export default class Veiculo extends BaseEntity {
 
     @Column()
     veiculo_esta_sendo_utilizado_no_momento: boolean
-
-    @Column()
-    matriz_id: number
 
     static Builder = class VeiculoBuilder extends Builder<Veiculo> {
         constructor() { super(new Veiculo()) }
@@ -111,6 +114,11 @@ export default class Veiculo extends BaseEntity {
 
         estaSendoUtilizado(simOuNao: boolean): this {
             this.entity.veiculo_esta_sendo_utilizado_no_momento = simOuNao
+            return this
+        }
+
+        kilometragem_atual(km: number): this {
+            this.entity.kilometragem_atual = km
             return this
         }
     }

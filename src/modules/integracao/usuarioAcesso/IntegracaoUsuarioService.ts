@@ -36,8 +36,8 @@ export default class IntegracaoUsuarioService {
             where: { identificador_sistema_origem: identificadorSistemaOrigem }
         })
 
-        if (!matriz) {
-            throw new DefaultAppError('Matriz nao encontrada no processo de integraçāo');
+        if (!matriz || !matriz.ativo) {
+            throw new DefaultAppError('Matriz nao existente ou inativa');
         }
 
         const pessoa = await this.vincularPessoa(nome, email, matriz.id)
@@ -70,6 +70,7 @@ export default class IntegracaoUsuarioService {
             .primeiro_nome(nome)
             .rg('')
             .ultimo_nome('')
+            .ativo(false)
             .tipo(TipoPessoa.ADMINISTRADOR)
             .matriz_id(matrizId)
             .build()

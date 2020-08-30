@@ -32,4 +32,7 @@ export default class VeiculoUpdateInput {
 
     @Field(() => Int)
     pessoa_id: number
+
+    @Field({ nullable: true })
+    kilometragem_atual?: number
 }

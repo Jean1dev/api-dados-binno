@@ -29,4 +29,7 @@ export default class VeiculoCreateInput {
 
     @Field(() => Int)
     pessoa_id: number
+
+    @Field({ nullable: true })
+    kilometragem_atual?: number
 }

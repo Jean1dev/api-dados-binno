@@ -1,13 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Rota from "../../rota/model/Rota";
 import Veiculo from "../../veiculo/model/Veiculo";
 import TipoPessoa from "../TipoPessoa.num";
 import Builder from "../../../shared/Builder";
+import Entidade from "../../../shared/Entidade";
 
 @Entity('pessoa')
 @ObjectType()
-export default class Pessoa extends BaseEntity {
+export default class Pessoa extends Entidade {
 
     @Field(() => ID)
     @PrimaryGeneratedColumn('increment')
@@ -82,9 +83,6 @@ export default class Pessoa extends BaseEntity {
 
     @Field(() => [Veiculo])
     veiculos?: [Veiculo]
-
-    @Column()
-    matriz_id: number
 
     static Builder = class PessoaBuilder extends Builder<Pessoa> {
 
@@ -172,6 +170,11 @@ export default class Pessoa extends BaseEntity {
 
         tipo(tipo: TipoPessoa): this {
             this.entity.tipo = tipo
+            return this
+        }
+
+        ativo(ativo: boolean): this {
+            this.entity.ativo = ativo
             return this
         }
     }
