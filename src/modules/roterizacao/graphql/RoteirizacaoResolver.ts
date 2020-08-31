@@ -52,11 +52,13 @@ export default class RoteirizacaoResolver {
         @Arg("roteirizacaoId") roteirizacaoId: number,
         @Arg("motoristaId", {defaultValue: null}) motoristaId: number,
         @Arg("geojsonURI") geojson: String,
+        @Arg("cor") cor: string,
         @Arg("situacao", type => SituacaoRota, {defaultValue: SituacaoRota.PLANEJADA}) situacao: SituacaoRota
     ) {
         const {roteirizacao, rota} = await this.service.criarRota({
             geojson,
             situacao,
+            cor,
             motoristaId,
             roteirizacaoId
         })

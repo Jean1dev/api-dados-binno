@@ -28,6 +28,7 @@ interface IDadosRota {
     motoristaId?: number | undefined
     situacao: SituacaoRota
     geojson: any
+    cor?: string
 }
 
 interface IRotaAndRascunho {
@@ -134,7 +135,7 @@ export default class RoteirizacaoService {
                 .situacao_rota(payload.situacao)
                 .geocoding(payload.geojson)
                 .nome(roteirizacao.descricao || '')
-                .cor(roteirizacao.cor || Utils.geraCor())
+                .cor(payload.cor || Utils.geraCor())
                 .build())
 
             return {
