@@ -75,10 +75,14 @@ export default class RotaResolver {
         @Arg("motorista_id") motorista_id: number,
         @Arg("situacao", type => SituacaoRota) situacao: SituacaoRota) {
 
-        return this.repository.find(undefined, undefined, {
-            enviado_para: motorista_id,
-            situacao_rota: situacao
-        });
+        let filter: any = {
+            enviado_para: motorista_id
+        }
+
+        if (situacao != SituacaoRota.TODOS) {
+            filter.situacao_rota = situacao
+        }
+        return this.repository.find(undefined, undefined, filter);
     }
 
     @Authorized()
