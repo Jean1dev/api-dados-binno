@@ -7,7 +7,6 @@ import Rota from "../../rota/model/Rota";
 import RotaRepository from "../../rota/repository/RotaRepository";
 import RoteirizacaoRepository from "../repository/RoteirizacaoRepository";
 import TaskClient from "../../../shared/RestClient/TaskClient";
-import { IGeocoding } from "../model/Geocoding.model";
 import SituacaoProcessamento from "../SituacaoProcessamento.enum";
 import UsuarioAcesso from "../../usuarioacesso/model/UsuarioAcesso";
 import Pessoa from "../../pessoa/model/Pessoa";
@@ -21,6 +20,7 @@ interface IWaypoint {
 interface IPayload {
     waypoints: [IWaypoint]
     optimize: boolean
+    api: 'v1' | 'v2'
 }
 
 interface IDadosRota {
@@ -112,7 +112,8 @@ export default class RoteirizacaoService {
                 roteirizacaoId: rota.id,
                 matrizId: matriz_id,
                 userId: userAccess,
-                payload
+                payload,
+                api: payload.api || 'v1'
             })
 
             return rota

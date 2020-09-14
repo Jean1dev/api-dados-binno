@@ -1,4 +1,4 @@
-import { BaseEntity, SelectQueryBuilder } from "typeorm";
+import { SelectQueryBuilder } from "typeorm";
 import FiltersExpression from "../graphql/shared/FiltersExpression";
 
 export default class JoinBuilder<T> {

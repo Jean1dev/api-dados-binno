@@ -1,4 +1,4 @@
-import { BaseEntity, SelectQueryBuilder } from "typeorm";
+import { SelectQueryBuilder } from "typeorm";
 import FiltersExpression from "../graphql/shared/FiltersExpression";
 import Filter from "../graphql/shared/Filter";
 import { Operation } from "../graphql/shared/filter.enum";

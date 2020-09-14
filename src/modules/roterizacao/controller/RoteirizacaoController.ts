@@ -12,6 +12,7 @@ interface IWaypoint {
 interface IPayload {
     waypoints: [IWaypoint]
     optimize: boolean
+    api: 'v1' | 'v2'
 }
 
 interface IFinalizarProcessamentoPayload {
