@@ -70,7 +70,8 @@ class App {
     }
 
     private monitoringServer(): void {
-        Sentry.init({ dsn: 'https://f91ad114a17d468ca8ff8e964e1be43f@o318666.ingest.sentry.io/5267522' });
+        if (process.env.SENTRY_DNS)
+            Sentry.init({ dsn: process.env.SENTRY_DNS });
     }
 
     private routes(): void {
@@ -84,7 +85,8 @@ class App {
     }
 
     private exceptionHandler(): void {
-        this.express.use(Sentry.Handlers.errorHandler())
+        if (process.env.SENTRY_DNS)
+            this.express.use(Sentry.Handlers.errorHandler())
         this.express.use(errorHandler)
     }
 
