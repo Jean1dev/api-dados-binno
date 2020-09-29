@@ -11,6 +11,8 @@ import { errorHandler } from './errors/CustomExpressErrorHandler'
 import * as Sentry from '@sentry/node'
 import cors from 'cors'
 import RequestedFields from "./graphql/shared/RequestedFields";
+import FormatGraphQLError from './errors/FormatGraphQLError'
+
 // require('appmetrics-dash').attach() // HEROKU JA FORNECE AS METRICAS
 
 class App {
@@ -42,7 +44,9 @@ class App {
             context: this.configureGraphQlContext(),
             introspection: true, // PARA HABILITAR O PLAYGROUND EM PRODUCAO
             playground: true, // PARA HABILITAR O PLAYGROUND EM PRODUCAO
+            formatError: FormatGraphQLError
         })
+    
         this.httpServer = http.createServer(this.express)
         this.middlewares()
         this.routes()
