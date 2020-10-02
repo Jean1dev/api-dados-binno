@@ -5,5 +5,5 @@ export default {
         'https://api-geolocalizacao-binno.herokuapp.com/geolocation',
     TASK_API_URL: process.env.NODE_ENV === 'dev'?
         'http://localhost:8090' :
-        'https://api-background-jobs.herokuapp.com'
+        'https://api-producer-jobs.herokuapp.com'
 }
