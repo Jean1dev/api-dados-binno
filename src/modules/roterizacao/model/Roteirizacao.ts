@@ -4,6 +4,7 @@ import Pessoa from "../../pessoa/model/Pessoa";
 import Builder from "../../../shared/Builder";
 import SituacaoProcessamento from "../SituacaoProcessamento.enum";
 import Entidade from "../../../shared/Entidade";
+import TipoRota from "../../rota/TipoRota.enum";
 
 @Entity('roteirizacao')
 @ObjectType()
@@ -41,10 +42,19 @@ export default class Roteirizacao extends Entidade {
     @Field(() => String)
     descricao?: string
 
+    @Column('int')
+    @Field(returns => TipoRota)
+    tipo: TipoRota
+
     static Builder = class RoteirizacaoBuilder extends Builder<Roteirizacao> {
 
         constructor() {
             super(new Roteirizacao());
+        }
+
+        tipo(tipo: TipoRota): this {
+            this.entity.tipo = tipo
+            return this
         }
 
         situacao(situacao: SituacaoProcessamento): this {

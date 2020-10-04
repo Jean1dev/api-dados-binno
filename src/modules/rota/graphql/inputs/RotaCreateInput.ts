@@ -1,5 +1,6 @@
 import { InputType, Field, Int } from "type-graphql";
 import SituacaoRota from "../../SituacaoRota.enum";
+import TipoRota from "../../TipoRota.enum";
 
 @InputType()
 export default class RotaCreateInput {
@@ -27,4 +28,7 @@ export default class RotaCreateInput {
 
     @Field(type => SituacaoRota, { defaultValue: SituacaoRota.PLANEJADA })
     situacao_rota: SituacaoRota
+
+    @Field(type => TipoRota, { defaultValue: TipoRota.SEM_TIPO })
+    tipo: TipoRota
 }

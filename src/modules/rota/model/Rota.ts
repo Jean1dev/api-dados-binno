@@ -4,6 +4,7 @@ import Pessoa from "../../pessoa/model/Pessoa";
 import SituacaoRota from "../SituacaoRota.enum";
 import Builder from "../../../shared/Builder";
 import Entidade from "../../../shared/Entidade";
+import TipoRota from "../TipoRota.enum";
 
 @Entity('rota')
 @ObjectType()
@@ -67,8 +68,17 @@ export default class Rota extends Entidade {
     @Field(type => SituacaoRota)
     situacao_rota: SituacaoRota
 
+    @Column('int')
+    @Field(type => TipoRota)
+    tipo: TipoRota
+
     static Builder = class RotaBuilder extends Builder<Rota> {
         constructor() { super(new Rota()) }
+
+        tipo(tipo: TipoRota): this {
+            this.entity.tipo = tipo
+            return this
+        }
 
         matriz_id(matriz_id: number): this {
             this.entity.matriz_id = matriz_id

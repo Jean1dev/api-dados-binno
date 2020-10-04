@@ -18,6 +18,10 @@ export default class BasicRepository<T extends DeepPartial<BaseEntity>> {
         return this.repository.findOne({where: filter})
     }
 
+    public async findById(id: number): Promise<T | undefined> {
+        return this.repository.findOne( { where: { id } } )
+    }
+
     public async findAll(): Promise<T[]> {
         const {matriz_id} = this.authenticationHolder.getAuthenticationData()
         return this.repository.find({where: {matriz_id, ativo: true}})

@@ -11,6 +11,7 @@ import SituacaoProcessamento from "../SituacaoProcessamento.enum";
 import UsuarioAcesso from "../../usuarioacesso/model/UsuarioAcesso";
 import Pessoa from "../../pessoa/model/Pessoa";
 import Utils from "../../../shared/utils/Utils";
+import TipoRota from "../../rota/TipoRota.enum";
 
 interface IWaypoint {
     longitude: number
@@ -21,6 +22,7 @@ interface IPayload {
     waypoints: [IWaypoint]
     optimize: boolean
     api: 'v1' | 'v2'
+    tipo: TipoRota
 }
 
 interface IDadosRota {
@@ -52,7 +54,7 @@ export default class RoteirizacaoService {
     }
 
     public async removerRoteirizacao(roteirizacaoId: number): Promise<boolean> {
-        let rota = await this.repository.findOne({ id: roteirizacaoId })
+        let rota = await this.repository.findById(roteirizacaoId)
         if (rota instanceof Roteirizacao) {
             const s3uri = rota.geocodingURI?.split('/')
             if (s3uri) {
@@ -66,7 +68,7 @@ export default class RoteirizacaoService {
     }
 
     public async falhaNoProcessamento(roteirizacaoId: number): Promise<void> {
-        let rota = await this.repository.findOne({ id: roteirizacaoId })
+        let rota = await this.repository.findById(roteirizacaoId)
         if (rota instanceof Roteirizacao) {
             rota = new Roteirizacao.Builder()
                 .buildFrom(rota)
@@ -78,7 +80,7 @@ export default class RoteirizacaoService {
     }
 
     public async finalizarProcessamento(roteirizacaoId: number, uri: string): Promise<void> {
-        let rota = await this.repository.findOne({ id: roteirizacaoId })
+        let rota = await this.repository.findById(roteirizacaoId)
 
         if (rota instanceof Roteirizacao) {
             rota = new Roteirizacao.Builder()
@@ -102,6 +104,7 @@ export default class RoteirizacaoService {
             const pessoa = await Pessoa.findOne({ where: { id: user?.pessoa } })
 
             const rota = await this.repository.save(new Roteirizacao.Builder()
+                .tipo(payload.tipo)
                 .matriz_id(matriz_id)
                 //@ts-ignore
                 .pessoa_id(pessoa.id)
@@ -124,13 +127,14 @@ export default class RoteirizacaoService {
 
     public async criarRota(payload: IDadosRota): Promise<IRotaAndRascunho> {
         try {
-            const roteirizacao = await this.repository.findOne({ where: { id: payload.roteirizacaoId } })
+            const roteirizacao = await this.repository.findById(payload.roteirizacaoId)
 
             if (!roteirizacao) {
                 throw new DefaultAppError('Roteirizacao inexistente')
             }
 
             const rota = await this.rotaRepository.save(new Rota.Builder()
+                .tipo(roteirizacao.tipo)
                 .criado_por(roteirizacao.pessoa_id)
                 .enviado_para(payload.motoristaId)
                 .situacao_rota(payload.situacao)
@@ -138,6 +142,9 @@ export default class RoteirizacaoService {
                 .nome(roteirizacao.descricao || '')
                 .cor(payload.cor || Utils.geraCor())
                 .build())
+
+            roteirizacao.teveAlgumaRotaCriada = true
+            await this.repository.save(roteirizacao)
 
             return {
                 rota,

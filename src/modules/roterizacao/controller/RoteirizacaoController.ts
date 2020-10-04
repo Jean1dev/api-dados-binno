@@ -3,6 +3,7 @@ import Roteirizacao from "../model/Roteirizacao";
 import RoteirizacaoService from "../service/RoteirizacaoService";
 import {container} from "tsyringe";
 import expressAuthCheck from "../../../middlewares/expressAuthCheck";
+import TipoRota from "../../rota/TipoRota.enum";
 
 interface IWaypoint {
     longitude: number
@@ -13,6 +14,7 @@ interface IPayload {
     waypoints: [IWaypoint]
     optimize: boolean
     api: 'v1' | 'v2'
+    tipo: TipoRota
 }
 
 interface IFinalizarProcessamentoPayload {
