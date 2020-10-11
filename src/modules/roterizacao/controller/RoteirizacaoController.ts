@@ -48,4 +48,10 @@ export default class RoteirizacaoController {
     public async falhaNoProcessamento(@Body() payload: IFinalizarProcessamentoPayload) {
         await this.service.falhaNoProcessamento(payload.roteirizacaoId)
     }
+
+    @Post('/clean-roteirizacao')
+    @OnUndefined(204)
+    public async limparRoteirizacao() {
+        await this.service.encontrarERemoverRoteirizacaoSemRotas()
+    }
 }

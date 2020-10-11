@@ -10,4 +10,8 @@ export default class RoteirizacaoRepository extends BasicRepository<Roteirizacao
     constructor() {
         super(getRepository(Roteirizacao));
     }
+
+    public async encontrarRoteirizacaoSemRotas(): Promise<Roteirizacao[]> {
+        return this.repository.find({ where: { teveAlgumaRotaCriada: false }})
+    }
 }

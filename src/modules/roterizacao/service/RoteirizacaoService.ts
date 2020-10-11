@@ -53,18 +53,30 @@ export default class RoteirizacaoService {
         this.repository = container.resolve(RoteirizacaoRepository)
     }
 
+    public async encontrarERemoverRoteirizacaoSemRotas(): Promise<void> {
+        const rotas = await this.repository.encontrarRoteirizacaoSemRotas()
+        rotas.forEach(async entity => {
+            await this.removeS3File(entity)
+            await this.repository.delete(entity.id)
+        })
+    }
+
     public async removerRoteirizacao(roteirizacaoId: number): Promise<boolean> {
         let rota = await this.repository.findById(roteirizacaoId)
         if (rota instanceof Roteirizacao) {
-            const s3uri = rota.geocodingURI?.split('/')
-            if (s3uri) {
-                const s3key = s3uri[s3uri.length - 1]
-                await this.tasksClient.removeS3File(s3key)
-            }
+            await this.removeS3File(rota)
             await this.repository.delete(roteirizacaoId)
             return true
         }
         return false
+    }
+
+    private async removeS3File(rota: Roteirizacao): Promise<void> {
+        const s3uri = rota.geocodingURI?.split('/')
+        if (s3uri) {
+            const s3key = s3uri[s3uri.length - 1]
+            await this.tasksClient.removeS3File(s3key)
+        }
     }
 
     public async falhaNoProcessamento(roteirizacaoId: number): Promise<void> {

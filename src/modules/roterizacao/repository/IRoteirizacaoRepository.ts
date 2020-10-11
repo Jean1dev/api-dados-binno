@@ -3,4 +3,5 @@ import Roteirizacao from "../model/Roteirizacao";
 
 export interface IRoteirizacaoRepository extends IBasicRepository<Roteirizacao>{
 
+    encontrarRoteirizacaoSemRotas(): Promise<Roteirizacao[]>
 }
