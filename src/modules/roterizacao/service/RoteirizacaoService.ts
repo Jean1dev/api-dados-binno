@@ -105,6 +105,39 @@ export default class RoteirizacaoService {
         }
     }
 
+    public async roteirizarComParametros(payload: any): Promise<Roteirizacao> {
+        try {
+            const { userAccess, matriz_id } = this.authenticationHolder.getAuthenticationData()
+            if (!userAccess || !matriz_id) {
+                throw new DefaultAppError('userAccess ou matriz_id nao fornecidos')
+            }
+
+            const user = await UsuarioAcesso.findOne({ where: { id: userAccess } })
+            const pessoa = await Pessoa.findOne({ where: { id: user?.pessoa } })
+
+            const rota = await this.repository.save(new Roteirizacao.Builder()
+                .tipo(payload.tipo)
+                .matriz_id(matriz_id)
+                //@ts-ignore
+                .pessoa_id(pessoa.id)
+                .cor(Utils.geraCor())
+                .build())
+
+            await this.tasksClient.creatTaskRoteirizar({
+                roteirizacaoId: rota.id,
+                matrizId: matriz_id,
+                userId: userAccess,
+                payload,
+                api: payload.api || 'v1',
+                customizada: true
+            })
+
+            return rota
+        } catch (e) {
+            throw new DefaultAppError('Ocorreu um erro ao criar o rascunho', 400, e)
+        }
+    }
+
     public async roteirizar(payload: IPayload): Promise<Roteirizacao> {
         try {
             const { userAccess, matriz_id } = this.authenticationHolder.getAuthenticationData()
@@ -128,7 +161,8 @@ export default class RoteirizacaoService {
                 matrizId: matriz_id,
                 userId: userAccess,
                 payload,
-                api: payload.api || 'v1'
+                api: payload.api || 'v1',
+                customizada: false
             })
 
             return rota

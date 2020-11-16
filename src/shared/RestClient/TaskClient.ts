@@ -8,12 +8,13 @@ interface ICriarRascunhoPayload {
     userId: number
     roteirizacaoId: number
     api: 'v1' | 'v2'
+    customizada: boolean
 }
 
 @singleton()
 export default class TaskClient {
     private BASE_URL = configs.TASK_API_URL
-    private DEFAULT_TIMEOUT = 25000
+    private DEFAULT_TIMEOUT = 30000
 
     public async creatTaskRoteirizar(payload: ICriarRascunhoPayload): Promise<AxiosResponse> {
         return axios.post(`${this.BASE_URL}/task`, payload, { timeout: this.DEFAULT_TIMEOUT })
