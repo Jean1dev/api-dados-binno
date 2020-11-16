@@ -37,6 +37,12 @@ export default class RoteirizacaoController {
         return this.service.roteirizar(payload)
     }
 
+    @Post('/executar-customizada')
+    @UseBefore(expressAuthCheck)
+    public async criarRascunhoCustomizado(@Body() payload: object): Promise<Roteirizacao> {
+        return this.service.roteirizarComParametros(payload)
+    }
+
     @Post('/processamento')
     @OnUndefined(204)
     public async finalizarProcessamento(@Body() payload: IFinalizarProcessamentoPayload) {
