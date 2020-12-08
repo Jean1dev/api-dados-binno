@@ -22,6 +22,7 @@ export default async function BuiltSchema(): Promise<GraphQLSchema> {
             ConfiguracaoResolver,
             UsuarioAcessoResolver
         ],
+        validate: true,
         nullableByDefault: true,
         authChecker: customAuthChecker
     })

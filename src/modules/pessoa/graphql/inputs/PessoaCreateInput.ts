@@ -1,9 +1,11 @@
+import { Length } from "class-validator";
 import { InputType, Field } from "type-graphql";
 import TipoPessoa from "../../TipoPessoa.num";
 
 @InputType()
 export default class PessoaCreateInput {
 
+    @Length(30, 255, { message: 'O tamanho minimo deve ser 30 e o maximo 255'})
     @Field()
     primeiro_nome: string
 

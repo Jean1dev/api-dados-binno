@@ -30,6 +30,7 @@ export default class PessoaResolver {
         return Rota.find({where: {criado_por: pessoa.id}})
     }
 
+    //TODO: LINHA 37 WTF
     @Authorized()
     @Query(() => PaginatedPessoa)
     public async pessoasPaginated(
@@ -54,7 +55,7 @@ export default class PessoaResolver {
 
     @Authorized()
     @Mutation(() => Pessoa)
-    public async savePessoa(@Arg("data") data: PessoaCreateInput) {
+    public async savePessoa(@Arg("data", { validate: true }) data: PessoaCreateInput) {
         return this.service.salvar(data as Pessoa)
     }
 
