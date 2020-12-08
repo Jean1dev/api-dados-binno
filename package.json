@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=prod node dist/index.js",
     "dev": "NODE_ENV=dev ts-node-dev --inspect --ignore-watch node_modules src/index.ts",
-    "dev:not:inspect": "NODE_ENV=dev ts-node-dev --transpileOnly --ignore-watch node_modules src/index.ts",
+    "dev:not:inspect": "NODE_ENV=dev ts-node-dev --ignore-watch node_modules src/index.ts",
     "test": "NODE_ENV=test jest",
     "build": "tsc",
     "migrate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",

@@ -149,7 +149,7 @@ export default class RoteirizacaoService {
             const pessoa = await Pessoa.findOne({ where: { id: user?.pessoa } })
 
             const rota = await this.repository.save(new Roteirizacao.Builder()
-                .tipo(payload.tipo)
+                .tipo(TipoRota.SEM_ENTREGA == payload.tipo ? 0 : 1)
                 .matriz_id(matriz_id)
                 //@ts-ignore
                 .pessoa_id(pessoa.id)
